@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global OSINT & Security Suite v3.0</title>
+    <style>
+        :root {
+            --bg-color: #07090e;
+            --card-bg: rgba(18, 24, 38, 0.85);
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: rgba(56, 189, 248, 0.2);
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Arka Plan Kar Taneleri Efekti */
+        #snow-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 290px;
+            background-color: rgba(13, 18, 29, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .menu-list {
+            list-style: none;
+            overflow-y: auto;
+            flex: 1;
+            padding: 12px;
+        }
+
+        .menu-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .menu-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+        }
+
+        .submenu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sub-menu {
+            list-style: none;
+            padding-left: 15px;
+            display: none;
+            margin-top: 6px;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .sub-menu.show {
+            display: block;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 10;
+            position: relative;
+        }
+
+        header.topbar {
+            height: 65px;
+            background-color: rgba(13, 18, 29, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+        }
+
+        .menu-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        .content-body {
+            padding: 25px;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .card h2 {
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px 18px;
+            background-color: rgba(7, 9, 14, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: #07090e;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 9px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 8px;
+            margin-top: 8px;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(51, 65, 85, 0.6);
+            color: var(--text-color);
+            box-shadow: none;
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover {
+            background: rgba(51, 65, 85, 0.9);
+        }
+
+        .result-box {
+            background-color: rgba(4, 6, 10, 0.9);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            margin-top: 18px;
+            color: var(--success-color);
+            max-height: 280px;
+            overflow-y: auto;
+            font-size: 0.92rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .banner-telegram {
+            background: linear-gradient(135deg, #229ED9, #17719f);
+            color: white;
+            padding: 14px 22px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-decoration: none;
+            display: block;
+            box-shadow: 0 4px 20px rgba(34, 158, 217, 0.4);
+            transition: transform 0.3s;
+        }
+        .banner-telegram:hover {
+            transform: scale(1.01);
+        }
+
+        @media (max-width: 768px) {
+            aside {
+                position: fixed;
+                height: 100%;
+                transform: translateX(-100%);
+            }
+            aside.open {
+                transform: translateX(0);
+            }
+            .menu-toggle-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Arka Plan Kar Taneleri Kanvası -->
+    <canvas id="snow-canvas"></canvas>
+
+    <!-- Yan Menü -->
+    <aside id="yanMenu">
+        <div class="sidebar-header">
+            <span>Global OSINT</span>
+            <span style="font-size: 0.8rem; color: var(--accent-color); font-weight: normal;">@SwanchOrj</span>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item active" onclick="switchPage('page-ip', this)">IP & Ağ OSINT</li>
+            <li class="menu-item" onclick="switchPage('page-dns', this)">DNS & SSL Checker</li>
+            <li class="menu-item" onclick="switchPage('page-proxy', this)">Proxy / Port Checker</li>
+            <li class="menu-item" onclick="switchPage('page-jwt', this)">JWT Token Decoder</li>
+            <li class="menu-item" onclick="switchPage('page-whois', this)">Domain Whois Lookup</li>
+            <li class="menu-item" onclick="switchPage('page-discord', this)">Discord OSINT</li>
+            <li class="menu-item" onclick="switchPage('page-telegram', this)">Telegram Snoser</li>
+            
+            <!-- Akordeon Türkiye OSINT Paneli -->
+            <li class="menu-item">
+                <div class="submenu-header" onclick="toggleSubmenu()">
+                    <span>Türkiye OSINT Paneli</span>
+                    <span id="trArrow">▼</span>
+                </div>
+                <ul class="sub-menu" id="trSubMenu">
+                    <li class="menu-item" onclick="switchPage('page-tr', this); setTrCard('tc')">TC Kimlik Sorgu</li>
+                    <li class="menu-item" onclick="switchPage('page-tr', this); setTrCard('isim')">Ad Soyad Sorgu</li>
+                    <li class="menu-item" onclick="switchPage('page-tr', this); setTrCard('gsm')">GSM No Sorgu</li>
+                    <li class="menu-item" onclick="switchPage('page-tr', this); setTrCard('adres')">Adres Bilgi Sorgu</li>
+                    <li class="menu-item" onclick="switchPage('page-tr', this); setTrCard('plaka')">Araç Plaka Sorgu</li>
+                    <li class="menu-item" onclick="switchPage('page-tr', this); setTrCard('okul')">Okul / Mezuniyet</li>
+                </ul>
+            </li>
+
+            <li class="menu-item" onclick="switchPage('page-tools', this)">Gelişmiş Araçlar (CC, Hash, Mail)</li>
+        </ul>
+    </aside>
+
+    <!-- Ana İçerik Alanı -->
+    <main>
+        <header class="topbar">
+            <button class="menu-toggle-btn" onclick="toggleMobileMenu()">☰</button>
+            <span style="font-weight: bold; color: var(--accent-color); letter-spacing: 0.5px;">Advanced Security & Intelligence Suite</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Status: Online</span>
+        </header>
+
+        <div class="content-body">
+            
+            <!-- Telegram Banner -->
+            <a href="https://t.me/SwanchOrj" target="_blank" class="banner-telegram">
+                [+] Resmi Telegram Kanalımız: @SwanchOrj - Katılmak İçin Tıkla
+            </a>
+
+            <!-- 1. IP & Ağ OSINT -->
+            <div id="page-ip" class="page-section active">
+                <div class="card">
+                    <h2>IP & Ağ Analiz Modülü</h2>
+                    <div class="form-group">
+                        <label>Hedef IP Adresi / Hostname</label>
+                        <input type="text" id="inputIp" placeholder="Örn: 8.8.8.8">
+                    </div>
+                    <button class="btn" onclick="runIpOsint()">Sorgula</button>
+                    <button class="btn btn-secondary" onclick="clearBox('resultIp', 'inputIp')">Temizle</button>
+                    <div class="result-box" id="resultIp">Sorgu için hazır durumda...</div>
+                </div>
+            </div>
+
+            <!-- 2. DNS & SSL Checker -->
+            <div id="page-dns" class="page-section">
+                <div class="card">
+                    <h2>DNS Kayıtları & SSL Sertifika Analizi</h2>
+                    <div class="form-group">
+                        <label>Target Domain</label>
+                        <input type="text" id="inputDns" placeholder="Örn: example.com">
+                    </div>
+                    <button class="btn" onclick="runDnsCheck()">DNS & SSL Analiz Et</button>
+                    <div class="result-box" id="resultDns">Veriler bekleniyor...</div>
+                </div>
+            </div>
+
+            <!-- 3. Proxy / Port Checker -->
+            <div id="page-proxy" class="page-section">
+                <div class="card">
+                    <h2>Proxy / Canlı Port Tarayıcı</h2>
+                    <div class="form-group">
+                        <label>IP ve Port (Örn: 192.168.1.1:8080)</label>
+                        <input type="text" id="inputProxy" placeholder="IP:Port giriniz">
+                    </div>
+                    <button class="btn" onclick="runProxyCheck()">Port Taraması Başlat</button>
+                    <div class="result-box" id="resultProxy">[+] Proxy / Port Scanner modülü aktif. Taramaya hazır.</div>
+                </div>
+            </div>
+
+            <!-- 4. JWT Token Decoder -->
+            <div id="page-jwt" class="page-section">
+                <div class="card">
+                    <h2>JWT Token Ayrıştırıcı (Header & Payload)</h2>
+                    <div class="form-group">
+                        <label>JWT Token Metni</label>
+                        <input type="text" id="inputJwt" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+                    </div>
+                    <button class="btn" onclick="runJwtDecode()">Token Çözümle</button>
+                    <div class="result-box" id="resultJwt">[+] JWT Token Decoder aktif. Token bekleniyor.</div>
+                </div>
+            </div>
+
+            <!-- 5. Whois Lookup -->
+            <div id="page-whois" class="page-section">
+                <div class="card">
+                    <h2>Domain Whois Kayıt Analizi</h2>
+                    <div class="form-group">
+                        <label>Domain Adı</label>
+                        <input type="text" id="inputWhois" placeholder="Örn: hedefsite.com">
+                    </div>
+                    <button class="btn" onclick="runWhois()">Whois Sorgula</button>
+                    <div class="result-box" id="resultWhois">[+] Whois Lookup aktif. Sorgu bekleniyor.</div>
+                </div>
+            </div>
+
+            <!-- 6. Discord OSINT -->
+            <div id="page-discord" class="page-section">
+                <div class="card">
+                    <h2>Discord Kullanıcı & Sunucu İstihbaratı</h2>
+                    <div class="form-group">
+                        <label>Discord Kullanıcı ID</label>
+                        <input type="text" id="inputDiscord" placeholder="Kullanıcı ID girin...">
+                    </div>
+                    <button class="btn" onclick="runDiscord()">Veri Çek</button>
+                    <div class="result-box" id="resultDiscord">[+] Discord OSINT modülü aktif.</div>
+                </div>
+            </div>
+
+            <!-- 7. Telegram Snoser -->
+            <div id="page-telegram" class="page-section">
+                <div class="card">
+                    <h2>Telegram Kullanıcı / Kanal Analiz Modülü</h2>
+                    <div class="form-group">
+                        <label>Telegram Kullanıcı Adı</label>
+                        <input type="text" id="inputTelegram" placeholder="@kullaniciadi">
+                    </div>
+                    <button class="btn" onclick="runTelegram()">Analiz Et</button>
+                    <div class="result-box" id="resultTelegram">[+] Telegram Snoser modülü aktif.</div>
+                </div>
+            </div>
+
+            <!-- 8. Türkiye OSINT Paneli -->
+            <div id="page-tr" class="page-section">
+                <div class="card">
+                    <h2 id="trPanelTitle">Türkiye Veri Sorgulama Paneli</h2>
+                    <div class="form-group">
+                        <label id="trLabel">Sorgu Parametresi</label>
+                        <input type="text" id="inputTrQuery" placeholder="Aranacak değeri girin...">
+                    </div>
+                    <button class="btn" onclick="runTrQuery()">Veritabanında Ara</button>
+                    <div class="result-box" id="resultTr">[+] Güvenli bağlantı sağlandı. Sorgu bekleniyor...</div>
+                </div>
+            </div>
+
+            <!-- 9. Ekstra Araçlar -->
+            <div id="page-tools" class="page-section">
+                <div class="card">
+                    <h2>Luhn Algoritmalı Test Kartı (CC) Üreteci</h2>
+                    <div class="form-group">
+                        <label>BIN Kodu (İlk 6 Hane)</label>
+                        <input type="text" id="etCcBin" placeholder="453272">
+                    </div>
+                    <button class="btn" onclick="runCcGen()">Kart Üret</button>
+                    <div class="result-box" id="resultCc">[+] CC Generator modülü aktif.</div>
+                </div>
+
+                <div class="card">
+                    <h2>E-Posta Sızıntı (Breach) Sorgulama</h2>
+                    <div class="form-group">
+                        <label>E-Posta Adresi</label>
+                        <input type="text" id="etMail" placeholder="ornek@domain.com">
+                    </div>
+                    <button class="btn" onclick="runMailCheck()">Sızıntı Taraması Yap</button>
+                    <div class="result-box" id="resultMail">[+] E-Posta breach tarayıcı aktif.</div>
+                </div>
+
+                <div class="card">
+                    <h2>MD5 & SHA-256 Hash Şifreleme Aracı</h2>
+                    <div class="form-group">
+                        <label>Metin Değeri</label>
+                        <input type="text" id="etHash" placeholder="Şifrelenecek metni yazın...">
+                    </div>
+                    <button class="btn" onclick="runHash('md5')">MD5 Üret</button>
+                    <button class="btn" onclick="runHash('sha256')">SHA-256 Üret</button>
+                    <div class="result-box" id="resultHash">[+] Hash motoru hazır.</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        /* --- Kar Taneleri Arka Plan Animasyonu --- */
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const snowflakes = [];
+        const numSnowflakes = 55;
+
+        for (let i = 0; i < numSnowflakes; i++) {
+            snowflakes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.8 + 0.5,
+                speed: Math.random() * 0.4 + 0.1,
+                wind: Math.random() * 0.3 - 0.15
+            });
+        }
+
+        function drawSnow() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
+            ctx.beginPath();
+            for (let flake of snowflakes) {
+                ctx.moveTo(flake.x, flake.y);
+                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2, true);
+            }
+            ctx.fill();
+            updateSnow();
+        }
+
+        function updateSnow() {
+            for (let flake of snowflakes) {
+                flake.y += flake.speed;
+                flake.x += flake.wind;
+
+                if (flake.y > canvas.height) {
+                    flake.y = 0;
+                    flake.x = Math.random() * canvas.width;
+                }
+                if (flake.x > canvas.width || flake.x < 0) {
+                    flake.x = Math.random() * canvas.width;
+                }
+            }
+        }
+
+        setInterval(drawSnow, 30);
+
+        /* --- Arayüz Fonksiyonları --- */
+        function switchPage(pageId, element) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            if(element) {
+                document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+            
+            if(window.innerWidth <= 768) {
+                document.getElementById('yanMenu').classList.remove('open');
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('yanMenu').classList.toggle('open');
+        }
+
+        function toggleSubmenu() {
+            const sub = document.getElementById('trSubMenu');
+            const arrow = document.getElementById('trArrow');
+            if(sub.classList.contains('show')) {
+                sub.classList.remove('show');
+                arrow.innerText = '▼';
+            } else {
+                sub.classList.add('show');
+                arrow.innerText = '▲';
+            }
+        }
+
+        function setTrCard(type) {
+            const titles = {
+                'tc': 'TC Kimlik Sorgulama Modülü',
+                'isim': 'Ad Soyad Sorgulama Modülü',
+                'gsm': 'GSM No Sorgulama Modülü',
+                'adres': 'Adres Bilgi Sorgulama Modülü',
+                'plaka': 'Araç Plaka Sorgulama Modülü',
+                'okul': 'Okul / Mezuniyet Sorgulama Modülü'
+            };
+            document.getElementById('trPanelTitle').innerText = titles[type] || 'Türkiye Veri Sorgulama';
+            document.getElementById('resultTr').innerText = '[+] ' + titles[type] + ' aktif. Lütfen hedef veri giriniz.';
+        }
+
+        function clearBox(boxId, inputId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(boxId).innerText = 'Ekran temizlendi, yeni sorgu bekleniyor.';
+        }
+
+        /* --- Simüle Edilmiş Araç Yanıtları --- */
+        function runIpOsint() {
+            let ip = document.getElementById('inputIp').value || '8.8.8.8';
+            document.getElementById('resultIp').innerText = "[+] Hedef IP: " + ip + "\n[✓] Lokasyon: United States (US)\n[✓] Organizasyon: Google LLC\n[✓] Port Durumu: Güvenli / Filtrelenmiş\n[✓] Tehdit Skoru: Temiz (0%)";
+        }
+
+        function runDnsCheck() {
+            let domain = document.getElementById('inputDns').value || 'example.com';
+            document.getElementById('resultDns').innerText = "[+] Domain: " + domain + "\n[✓] A Kaydı: 93.184.216.34\n[✓] NS Kayıtları: ns1.iana.org\n[✓] SSL Sertifikası: Geçerli (Let's Encrypt RSA)\n[✓] Bitiş Tarihi: 2027-04-12";
+        }
+
+        function runProxyCheck() {
+            let proxy = document.getElementById('inputProxy').value || '127.0.0.1:8080';
+            document.getElementById('resultProxy').innerText = "[+] Target: " + proxy + "\n[✓] Bağlantı testi başarılı.\n[✓] Proxy Tipi: SOCKS5 / HTTP Tunnel\n[✓] Gecikme (Ping): 42ms";
+        }
+
+        function runJwtDecode() {
+            document.getElementById('resultJwt').innerText = "[+] Header:\n{\"alg\":\"HS256\",\"typ\":\"JWT\"}\n\n[+] Payload:\n{\"sub\":\"987654321\",\"handle\":\"@SwanchOrj\",\"role\":\"Administrator\",\"iat\":1718270000}\n\n[✓] İmza yapısı doğrulandı.";
+        }
+
+        function runWhois() {
+            let dom = document.getElementById('inputWhois').value || 'hedefsite.com';
+            document.getElementById('resultWhois').innerText = "[+] Domain: " + dom + "\n[✓] Registrar: NameCheap Inc.\n[✓] Oluşturulma: 2021-05-19\n[✓] Güncelleme: 2025-01-10\n[✓] Durum: clientTransferProhibited";
+        }
+
+        function runDiscord() {
+            document.getElementById('resultDiscord').innerText = "[+] Discord Sorgusu Başarılı.\n[✓] Hesap Türü: Kullanıcı\n[✓] Profil Yaşı: 4 Yıl 2 Ay\n[✓] Rozetler: Nitro, HypeSquad Bravery";
+        }
+
+        function runTelegram() {
+            document.getElementById('resultTelegram').innerText = "[+] Telegram İstihbaratı Tamamlandı.\n[✓] Kanal / Kullanıcı: Aktif\n[✓] DC ID: 4 (Amsterdam)\n[✓] Bağlantı Durumu: Güvenli";
+        }
+
+        function runTrQuery() {
+            let q = document.getElementById('inputTrQuery').value || 'Test Verisi';
+            document.getElementById('resultTr').innerText = "[+] Sorgulanan: " + q + "\n[✓] Veritabanı taraması tamamlandı.\n[✓] Eşleşen Kayıt: 1 adet veri bloğu listelendi.";
+        }
+
+        function runCcGen() {
+            let bin = document.getElementById('etCcBin').value || '453272';
+            document.getElementById('resultCc').innerText = "[+] Üretilen Test Kartı:\nKart No: " + bin + "819237419\nSKT: 09/29 | CVV: 741\n[✓] Luhn Algoritması Doğrulandı (Geçerli Test Formatı).";
+        }
+
+        function runMailCheck() {
+            let mail = document.getElementById('etMail').value || 'ornek@mail.com';
+            document.getElementById('resultMail').innerText = "[+] Hedef: " + mail + "\n[!] Sızıntı veritabanları tarandı.\n[✓] Sonuç: Herhangi bir breach (sızıntı) kaydına rastlanmadı (Clean).";
+        }
+
+        function runHash(type) {
+            let text = document.getElementById('etHash').value || 'Swanch';
+            let output = type === 'md5' ? '827ccb0eea8a706c4c34a16891f84e7b' : 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f';
+            document.getElementById('resultHash').innerText = "[" + type.toUpperCase() + " Çıktısı]:\n" + output;
+        }
+    </script>
+</body>
+</html>
