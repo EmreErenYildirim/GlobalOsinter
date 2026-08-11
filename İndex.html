@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWANCH | Advanced OSINT Framework</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #080b10;
+            --card-bg: #111622;
+            --border-color: #1f293d;
+            --accent-color: #00ff88;
+            --accent-glow: rgba(0, 255, 136, 0.2);
+            --text-main: #e6edf3;
+            --text-sub: #8b949e;
+            --danger-color: #ff4d4d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'JetBrains Mono', Consolas, monospace; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 15px; min-height: 100vh; }
+        
+        /* Header */
+        header { text-align: center; padding: 15px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        header h1 { font-size: 22px; color: var(--accent-color); text-shadow: 0 0 10px var(--accent-glow); letter-spacing: 2px; }
+        header p { font-size: 11px; color: var(--text-sub); margin-top: 4px; }
+
+        /* Navigation Tabs */
+        .nav-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-sub); padding: 10px 14px; border-radius: 6px; font-size: 12px; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--accent-color); color: #000; font-weight: bold; border-color: var(--accent-color); box-shadow: 0 0 12px var(--accent-glow); }
+
+        /* Tab Content Area */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Cards & Form Elements */
+        .panel-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 15px; }
+        .panel-card h2 { font-size: 14px; color: var(--accent-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 11px; color: var(--text-sub); margin-bottom: 6px; }
+        input, select { width: 100%; padding: 12px; background: #0b0f19; border: 1px solid var(--border-color); color: var(--accent-color); border-radius: 6px; font-size: 13px; outline: none; }
+        input:focus { border-color: var(--accent-color); }
+        
+        button.action-btn { width: 100%; padding: 12px; background: var(--accent-color); border: none; color: #000; font-weight: bold; border-radius: 6px; font-size: 13px; cursor: pointer; transition: 0.2s; }
+        button.action-btn:active { transform: scale(0.98); }
+
+        /* Output Window */
+        .terminal-output { background: #05070a; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; font-size: 11px; color: var(--text-main); min-height: 80px; max-height: 250px; overflow-y: auto; word-break: break-all; margin-top: 10px; line-height: 1.5; }
+        .terminal-output b { color: var(--accent-color); }
+        .link-item { display: inline-block; background: #1f293d; color: var(--accent-color); padding: 4px 8px; border-radius: 4px; text-decoration: none; margin: 3px 2px; font-size: 11px; }
+
+        /* Badge Status */
+        .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: bold; text-transform: uppercase; }
+        .badge-success { background: rgba(0,255,136,0.1); color: var(--accent-color); border: 1px solid var(--accent-color); }
+        .badge-danger { background: rgba(255,77,77,0.1); color: var(--danger-color); border: 1px solid var(--danger-color); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-shield-halved"></i> OSINT FRAMEWORK</h1>
+        <p>AÇIK KAYNAK İSTİHBARAT VE ANALİZ PANELİ</p>
+    </header>
+
+    <!-- Modül Menüsü -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('email-tab')"><i class="fa-solid fa-envelope"></i> Gmail/E-posta</button>
+        <button class="tab-btn" onclick="switchTab('ip-tab')"><i class="fa-solid fa-network-wired"></i> IP & DNS</button>
+        <button class="tab-btn" onclick="switchTab('social-tab')"><i class="fa-solid fa-user-ninja"></i> Kullanıcı Adı</button>
+        <button class="tab-btn" onclick="switchTab('dork-tab')"><i class="fa-solid fa-magnifying-glass"></i> Google Dork</button>
+    </div>
+
+    <!-- 1. MODÜL: GMAIL & E-POSTA OSINT -->
+    <div id="email-tab" class="tab-content active">
+        <div class="panel-card">
+            <h2><i class="fa-solid fa-at"></i> E-Posta / Gmail İstihbarat Analizi</h2>
+            <div class="input-group">
+                <label>Hedef E-Posta / Gmail Adresi</label>
+                <input type="email" id="emailInput" placeholder="ornek@gmail.com">
+            </div>
+            <button class="action-btn" onclick="analyzeEmail()">Sorgulamayı Başlat</button>
+            <div id="emailOutput" class="terminal-output">Analiz bekleniyor...</div>
+        </div>
+    </div>
+
+    <!-- 2. MODÜL: IP & DNS OSINT -->
+    <div id="ip-tab" class="tab-content">
+        <div class="panel-card">
+            <h2><i class="fa-solid fa-globe"></i> IP / Domain Bilgi Toplama</h2>
+            <div class="input-group">
+                <label>Hedef IP veya Web Adresi</label>
+                <input type="text" id="ipInput" placeholder="8.8.8.8 veya hedefsite.com">
+            </div>
+            <button class="action-btn" onclick="analyzeIP()">Sistem Bilgilerini Çek</button>
+            <div id="ipOutput" class="terminal-output">Sorgu bekleniyor...</div>
+        </div>
+    </div>
+
+    <!-- 3. MODÜL: KULLANICI ADI NICK İZLEYİCİ -->
+    <div id="social-tab" class="tab-content">
+        <div class="panel-card">
+            <h2><i class="fa-solid fa-id-badge"></i> Sosyal Medya & Platform Taraması</h2>
+            <div class="input-group">
+                <label>Aranacak Kullanıcı Adı (Nick)</label>
+                <input type="text" id="userInput" placeholder="kullanici_adi">
+            </div>
+            <button class="action-btn" onclick="searchUsername()">Platformlarda Ara</button>
+            <div id="userOutput" class="terminal-output">Arama bekleniyor...</div>
+        </div>
+    </div>
+
+    <!-- 4. MODÜL: GOOGLE DORK OLUSURUCU -->
+    <div id="dork-tab" class="tab-content">
+        <div class="panel-card">
+            <h2><i class="fa-brands fa-google"></i> Otomatik Google Dork Oluşturucu</h2>
+            <div class="input-group">
+                <label>Hedef Domain / Adres</label>
+                <input type="text" id="dorkDomain" placeholder="hedefsite.com">
+            </div>
+            <button class="action-btn" onclick="generateDorks()">Dork Bağlantılarını Üret</button>
+            <div id="dorkOutput" class="terminal-output">Dorklar bekleniyor...</div>
+        </div>
+    </div>
+
+    <script>
+        // Sekme Değiştirme Mantığı
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Gmail ve E-Posta Analiz Fonksiyonu
+        function analyzeEmail() {
+            let email = document.getElementById("emailInput").value.trim();
+            let out = document.getElementById("emailOutput");
+            if(!email) return alert("E-posta adresi girin!");
+
+            let domain = email.split('@')[1] || '';
+            let isGmail = domain.toLowerCase() === 'gmail.com';
+
+            out.innerHTML = `<b>[+] Hedef:</b> ${email}<br>`;
+            out.innerHTML += `<b>[+] Sağlayıcı:</b> ${domain.toUpperCase()}<br>`;
+            out.innerHTML += `<b>[+] Sağlayıcı Tipi:</b> ${isGmail ? '<span class="badge badge-success">Google Gmail</span>' : '<span class="badge badge-danger">Özel/Diğer</span>'}<br><br>`;
+            
+            out.innerHTML += `<b>[!] Dış İstihbarat Bağlantıları:</b><br>`;
+            out.innerHTML += `<a class="link-item" href="https://haveibeenpwned.com/account/${email}" target="_blank">HaveIBeenPwned (Veri Sızıntısı)</a>`;
+            out.innerHTML += `<a class="link-item" href="https://epieos.com/?q=${email}" target="_blank">Epieos (Google ID / Profile)</a>`;
+            out.innerHTML += `<a class="link-item" href="https://intelx.io/?s=${email}" target="_blank">IntelX Arşivi</a>`;
+            
+            if(isGmail) {
+                let username = email.split('@')[0];
+                out.innerHTML += `<br><br><b>[!] Google Hesap Profil Arama:</b><br>`;
+                out.innerHTML += `<a class="link-item" href="https://picasaweb.google.com/data/entry/api/user/${username}?alt=json" target="_blank">Google Album / User ID Check</a>`;
+            }
+        }
+
+        // IP ve DNS Analiz Fonksiyonu
+        async function analyzeIP() {
+            let target = document.getElementById("ipInput").value.trim();
+            let out = document.getElementById("ipOutput");
+            if(!target) return alert("IP veya Domain girin!");
+
+            out.innerText = "[*] Veriler çekiliyor...";
+            try {
+                let res = await fetch(`https://ipapi.co/${target}/json/`);
+                let data = await res.json();
+                
+                if(data.error) {
+                    out.innerText = "[-] Hata: " + data.reason;
+                } else {
+                    out.innerHTML = `
+                        <b>IP:</b> ${data.ip}<br>
+                        <b>Ülke:</b> ${data.country_name} (${data.country_code})<br>
+                        <b>Şehir / Bölge:</b> ${data.city} / ${data.region}<br>
+                        <b>ISP / Org:</b> ${data.org} / ${data.asn}<br>
+                        <b>Konum:</b> ${data.latitude}, ${data.longitude}<br><br>
+                        <b>[!] Harici Taramalar:</b><br>
+                        <a class="link-item" href="https://www.shodan.io/host/${data.ip}" target="_blank">Shodan Taraması</a>
+                        <a class="link-item" href="https://virustotal.com/gui/ip-address/${data.ip}" target="_blank">VirusTotal</a>
+                    `;
+                }
+            } catch(e) {
+                out.innerText = "[-] Bağlantı hatası oluştu veya API yanıt vermedi.";
+            }
+        }
+
+        // Sosyal Medya Kullanıcı Adı Arama
+        function searchUsername() {
+            let user = document.getElementById("userInput").value.trim();
+            let out = document.getElementById("userOutput");
+            if(!user) return alert("Kullanıcı adı girin!");
+
+            out.innerHTML = `<b>[+] Target User:</b> ${user}<br><br>`;
+            
+            let platforms = [
+                { name: "GitHub", url: `https://github.com/${user}` },
+                { name: "Telegram", url: `https://t.me/${user}` },
+                { name: "Instagram", url: `https://instagram.com/${user}` },
+                { name: "Twitter/X", url: `https://x.com/${user}` },
+                { name: "Reddit", url: `https://reddit.com/user/${user}` },
+                { name: "Steam", url: `https://steamcommunity.com/id/${user}` }
+            ];
+
+            platforms.forEach(p => {
+                out.innerHTML += `<a class="link-item" href="${p.url}" target="_blank">${p.name} Profilini Aç</a> `;
+            });
+        }
+
+        // Google Dork Oluşturucu
+        function generateDorks() {
+            let domain = document.getElementById("dorkDomain").value.trim();
+            let out = document.getElementById("dorkOutput");
+            if(!domain) return alert("Domain girin!");
+
+            out.innerHTML = `<b>[+] Target Domain:</b> ${domain}<br><br>`;
+            
+            let dorks = [
+                { name: "Açık Dizinler (Index of)", query: `site:${domain} intitle:"index of"` },
+                { name: "Hassas Dosyalar (PDF, DOC, XLS)", query: `site:${domain} filetype:pdf OR filetype:doc OR filetype:xls` },
+                { name: "Konfigürasyon / Log Dosyaları", query: `site:${domain} ext:xml OR ext:conf OR ext:log OR ext:env` },
+                { name: "Giriş Panelleri (Admin/Login)", query: `site:${domain} inurl:login OR inurl:admin` }
+            ];
+
+            dorks.forEach(d => {
+                let googleLink = `https://www.google.com/search?q=${encodeURIComponent(d.query)}`;
+                out.innerHTML += `<b>${d.name}:</b><br><a class="link-item" href="${googleLink}" target="_blank">Google'da Çalıştır</a><br><br>`;
+            });
+        }
+    </script>
+</body>
+</html>
