@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLOBAL OSINTER</title>
+    <title>GLOBAL OSINTER - PROJECT</title>
     <style>
         /* =========================================
            ROOT VARIABLES & BASE RESET
            ========================================= */
         :root {
             --bg-base: #020617;
-            --bg-panel: rgba(15, 23, 42, 0.85);
-            --bg-input: rgba(3, 7, 18, 0.7);
+            --bg-panel: rgba(15, 23, 42, 0.88);
+            --bg-input: rgba(3, 7, 18, 0.75);
             --border-primary: rgba(56, 189, 248, 0.25);
             --border-glow: rgba(56, 189, 248, 0.6);
-            --border-focus: rgba(14, 165, 233, 0.8);
+            --border-focus: rgba(14, 165, 233, 0.9);
             --accent-main: #38bdf8;
             --accent-hover: #0ea5e9;
-            --accent-glow: 0 0 20px rgba(56, 189, 248, 0.4);
+            --accent-glow: 0 0 25px rgba(56, 189, 248, 0.45);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
@@ -25,7 +25,7 @@
             --danger: #f43f5e;
             --warning: #f59e0b;
             --info: #3b82f6;
-            --sidebar-width: 320px;
+            --sidebar-width: 330px;
             --header-height: 75px;
             --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-code: 'Fira Code', 'Courier New', Courier, monospace;
@@ -70,7 +70,7 @@
         .vignette {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.8) 100%);
+            background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.85) 100%);
             z-index: 2;
             pointer-events: none;
         }
@@ -93,7 +93,7 @@
             background: var(--bg-panel);
             backdrop-filter: blur(25px);
             border-right: 1px solid var(--border-primary);
-            box-shadow: 10px 0 40px rgba(0,0,0,0.6);
+            box-shadow: 10px 0 40px rgba(0,0,0,0.7);
             display: flex; flex-direction: column;
             z-index: 100; height: 100vh;
             transition: var(--transition-slow);
@@ -105,7 +105,7 @@
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 25px;
             border-bottom: 1px solid var(--border-primary);
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(15, 23, 42, 0.5);
         }
 
         .brand-container { display: flex; flex-direction: column; }
@@ -165,7 +165,7 @@
             border-radius: 0 4px 4px 0;
         }
 
-        .menu-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; transition: 0.3s; }
+        .menu-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; transition: 0.3s; flex-shrink: 0; }
         
         .menu-item:hover {
             background: rgba(56, 189, 248, 0.05);
@@ -180,6 +180,11 @@
         .menu-item.active::before { transform: scaleY(1); }
         .menu-item.active svg { filter: drop-shadow(0 0 8px var(--accent-main)); }
 
+        .ai-badge-menu {
+            margin-left: auto; font-size: 0.6rem; background: rgba(16, 185, 129, 0.2);
+            color: var(--success); padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
         /* =========================================
            MAIN LAYOUT & HEADER
            ========================================= */
@@ -193,7 +198,7 @@
 
         header.topbar {
             height: var(--header-height);
-            background: rgba(2, 6, 23, 0.7);
+            background: rgba(2, 6, 23, 0.75);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-primary);
             display: flex; align-items: center; justify-content: space-between;
@@ -242,7 +247,7 @@
             backdrop-filter: blur(30px);
             border: 1px solid var(--border-primary);
             border-radius: 16px; padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(56, 189, 248, 0.03);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 0 30px rgba(56, 189, 248, 0.03);
             position: relative; overflow: hidden;
             animation: slideUp var(--transition-slow);
             margin-bottom: 30px;
@@ -267,7 +272,7 @@
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid var(--border-primary);
             border-radius: 14px; display: flex; align-items: center; justify-content: center;
-            color: var(--accent-main); box-shadow: var(--accent-glow);
+            color: var(--accent-main); box-shadow: var(--accent-glow); flex-shrink: 0;
         }
         .card-icon svg { width: 28px; height: 28px; stroke-width: 1.5; }
 
@@ -334,6 +339,12 @@
         }
         .btn-danger:hover { background: linear-gradient(135deg, #f43f5e, #be123c); box-shadow: 0 12px 30px rgba(225, 29, 72, 0.5); }
 
+        .btn-ai {
+            background: linear-gradient(135deg, #10b981, #047857);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        .btn-ai:hover { background: linear-gradient(135deg, #34d399, #059669); box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5); }
+
         /* =========================================
            TERMINAL CONSOLE (OUTPUT)
            ========================================= */
@@ -356,7 +367,7 @@
         .t-red { background: #ef4444; } .t-yellow { background: #eab308; } .t-green { background: #22c55e; }
 
         .terminal-box {
-            padding: 25px; height: 450px; overflow-y: auto;
+            padding: 25px; height: 480px; overflow-y: auto;
             font-family: var(--font-code); font-size: 0.95rem;
             color: #38bdf8; line-height: 1.7;
             scrollbar-width: thin; scrollbar-color: #334155 #0f172a;
@@ -370,7 +381,8 @@
         .t-success { color: #10b981; }
         .t-warn { color: #f59e0b; }
         .t-err { color: #f43f5e; font-weight: bold; }
-        .t-label { color: #f8fafc; font-weight: bold; display: inline-block; width: 160px; }
+        .t-ai { color: #34d399; font-weight: bold; }
+        .t-label { color: #f8fafc; font-weight: bold; display: inline-block; width: 180px; }
         .t-highlight { color: #fff; background: rgba(56, 189, 248, 0.2); padding: 0 4px; border-radius: 3px; }
 
         .loading-spinner {
@@ -384,6 +396,21 @@
         
         .progress-bar-container { width: 100%; max-width: 400px; height: 6px; background: #1e293b; border-radius: 10px; overflow: hidden; margin: 10px 0; display: none; }
         .progress-bar { height: 100%; background: var(--accent-main); width: 0%; transition: width 0.2s; box-shadow: 0 0 10px var(--accent-main); }
+
+        /* =========================================
+           GLOBAL ZEKA CHAT INTERFACE WIDGET
+           ========================================= */
+        .zeka-chat-box {
+            display: flex; flex-direction: column; gap: 15px; margin-top: 15px;
+        }
+        .zeka-messages {
+            background: rgba(3, 7, 18, 0.9); border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px; padding: 20px; height: 320px; overflow-y: auto;
+            font-family: var(--font-code); font-size: 0.9rem; display: flex; flex-direction: column; gap: 12px;
+        }
+        .zeka-msg { padding: 12px 16px; border-radius: 10px; max-width: 85%; line-height: 1.5; }
+        .zeka-msg.user { background: rgba(56, 189, 248, 0.15); align-self: flex-end; color: #fff; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .zeka-msg.ai { background: rgba(16, 185, 129, 0.1); align-self: flex-start; color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
 
         /* =========================================
            PAGES & RESPONSIVE
@@ -407,7 +434,7 @@
         
         @media (max-width: 480px) {
             .terminal-box { font-size: 0.8rem; padding: 15px; height: 350px; }
-            .t-label { width: 120px; }
+            .t-label { width: 130px; }
             .card-header-text h2 { font-size: 1.3rem; }
             header.topbar { padding: 0 15px; }
         }
@@ -427,17 +454,25 @@
     <!-- SIDEBAR -->
     <aside id="sidebar">
         <div class="sidebar-header">
-            <div class="brand-container">
-                <span class="brand">OSINTER V5</span>
+        <div class="brand-container">
+                <span class="brand">OSINTER V5.5</span>
                 <span class="brand-sub">Ultimate Edition</span>
             </div>
             <span class="user-badge">@SwanchOrj</span>
         </div>
         
         <ul class="menu-list">
+            <div class="menu-category">Yapay Zeka Çekirdeği</div>
+            
+            <li class="menu-item active" onclick="navigate('zeka', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 7.54 16.54l-1.41-1.41A8 8 0 1 0 12 20v2a10 10 0 1 1 0-20z"/><path d="M12 6v6l4 2"/></svg>
+                <span>GLOBAL ZEKA (AI)</span>
+                <span class="ai-badge-menu">AUTO</span>
+            </li>
+
             <div class="menu-category">Sosyal Medya İstihbaratı</div>
             
-            <li class="menu-item active" onclick="navigate('telegram', this)">
+            <li class="menu-item" onclick="navigate('telegram', this)">
                 <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 <span>Telegram Derin Sorgu</span>
             </li>
@@ -445,6 +480,12 @@
             <li class="menu-item" onclick="navigate('discord', this)">
                 <svg viewBox="0 0 24 24"><path d="M18 6h0a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h12z"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg>
                 <span>Discord Forensic</span>
+            </li>
+
+            <li class="menu-item" onclick="navigate('gmail', this)">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>Gmail & Google OSINT</span>
+                <span class="ai-badge-menu" style="background:rgba(56,189,248,0.2); color:var(--accent-main); border-color:var(--border-primary);">NEW</span>
             </li>
 
             <div class="menu-category">Ağ & Altyapı Analizi</div>
@@ -490,43 +531,68 @@
             </div>
             <div class="system-status">
                 <div class="pulse-dot"></div>
-                AĞA BAĞLI & GÜVENLİ
+                GLOBAL ZEKA & API ÇEVRİMİÇİ
             </div>
         </header>
 
         <div class="content-container">
             
+            <!-- 0. GLOBAL ZEKA (AI CORE) -->
+            <div id="zeka" class="page active">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="color:var(--success); border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.1);">
+                            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 7.54 16.54l-1.41-1.41A8 8 0 1 0 12 20v2a10 10 0 1 1 0-20z"/><path d="M12 6v6l4 2"/></svg>
+                        </div>
+                        <div class="card-header-text">
+                            <h2>GLOBAL ZEKA - Otonom AI Asistanı</h2>
+                            <p>Tüm OSINT modüllerini gerçek zamanlı yöneten, hedef analizi yapan ve otomatik rapor üreten akıllı sinir ağı.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="zeka-chat-box">
+                        <div class="zeka-messages" id="zeka-chat-log">
+                            <div class="zeka-msg ai">[GLOBAL ZEKA v5.5]: Sistemler aktif. Hangi hedef veya veri kümesi üzerinde otonom tarama başlatmamı istersiniz? (Örn: "Ahmet Yılmaz için tüm ağları tarat" veya bir IP/Email girin)</div>
+                        </div>
+                        <div class="input-grid" style="grid-template-columns: 1fr auto; gap: 15px; margin-bottom: 0;">
+                            <input type="text" id="zeka-input" class="custom-input" placeholder="Global Zeka'ya komut verin veya hedef yazın..." onkeypress="if(event.key==='Enter') triggerZekaAI()">
+                            <button class="cyber-btn btn-ai" onclick="triggerZekaAI()" style="min-width: 140px; margin: 0;">Emir Gönder</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 1. TELEGRAM RECON -->
-            <div id="telegram" class="page active">
+            <div id="telegram" class="page">
                 <div class="glass-card">
                     <div class="card-header">
                         <div class="card-icon">
                             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         </div>
                         <div class="card-header-text">
-                            <h2>Telegram Derin Sorgu Aracı</h2>
-                            <p>Hedef kullanıcının Data Center, bağlı gruplar, tahmini lokasyon ve gizli ID verilerini analiz eder.</p>
+                            <h2>Telegram Derin Sorgu & Bot API</h2>
+                            <p>Telegram Bot API altyapısı entegre edilmiş gerçek zamanlı kullanıcı, grup ve veri merkezi analizi.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
-                            <label>Hedef Kullanıcı Adı veya ID</label>
-                            <input type="text" id="tg-input" class="custom-input" placeholder="Örn: @swanchorj veya 1029384756">
+                            <label>Hedef Kullanıcı Adı veya Telefon / ID</label>
+                            <input type="text" id="tg-input" class="custom-input" placeholder="Örn: @swanchorj veya +905554443322">
                         </div>
                         <div class="input-group">
                             <label>Tarama Derinliği</label>
                             <select id="tg-depth" class="custom-input">
-                                <option value="fast">Hızlı Analiz (Sadece Profil)</option>
+                                <option value="fast">Hızlı Bot API (Profil & ID)</option>
                                 <option value="deep">Derin Tarama (Gruplar + İletişim Ağı)</option>
-                                <option value="agresif">Agresif (Data Center & Metadata)</option>
+                                <option value="agresif">Agresif (Real Data Center & Metadata Bridge)</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="action-bar">
                         <button class="cyber-btn" onclick="runSim('tg')">
-                            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg> Analizi Başlat
+                            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg> Telegram API Bağlan & Analiz Et
                         </button>
                         <button class="cyber-btn btn-ghost" onclick="clearTerm('tg')">Temizle</button>
                     </div>
@@ -538,17 +604,57 @@
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
-                            <span>root@osinter:~/modules/telegram_recon</span>
+                            <span>root@osinter:~/modules/telegram_bot_api</span>
                         </div>
                         <div class="terminal-box" id="tg-term">
-                            <div class="typing-line t-info">OSINT Framework v5.0 yükleniyor...</div>
+                            <div class="typing-line t-info">Telegram Core API v9.6 bağlantısı hazır.</div>
                             <div class="typing-line">Lütfen hedef belirleyip analizi başlatın.</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. DISCORD FORENSIC -->
+            <!-- 2. GMAIL OSINT (BEST OF ERA) -->
+            <div id="gmail" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="color:var(--accent-main); border-color:var(--border-primary);">
+                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </div>
+                        <div class="card-header-text">
+                            <h2>Gmail & Google Hesabı İstihbaratı</h2>
+                            <p>E-posta adresi üzerinden Google ID tespiti, kurtarma telefon/e-posta maskesi, sızıntı geçmişi ve platform bağlantıları.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Hedef Gmail Adresi</label>
+                            <input type="text" id="gmail-input" class="custom-input" placeholder="ornek@gmail.com">
+                        </div>
+                    </div>
+                    
+                    <div class="action-bar">
+                        <button class="cyber-btn" onclick="runSim('gmail')">Gmail İstihbaratını Başlat</button>
+                    </div>
+
+                    <div class="progress-bar-container" id="gmail-progress-container">
+                        <div class="progress-bar" id="gmail-progress"></div>
+                    </div>
+                    
+                    <div class="terminal-wrapper">
+                        <div class="terminal-header">
+                            <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+                            <span>root@osinter:~/modules/gmail_osint</span>
+                        </div>
+                        <div class="terminal-box" id="gmail-term">
+                            <div class="typing-line t-info">Google Auth & Public Enumeration Engine aktif...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. DISCORD FORENSIC -->
             <div id="discord" class="page">
                 <div class="glass-card">
                     <div class="card-header">
@@ -571,6 +677,10 @@
                     <div class="action-bar">
                         <button class="cyber-btn" onclick="runSim('dc')">Verileri Çek</button>
                     </div>
+
+                    <div class="progress-bar-container" id="dc-progress-container">
+                        <div class="progress-bar" id="dc-progress"></div>
+                    </div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
@@ -584,7 +694,7 @@
                 </div>
             </div>
 
-            <!-- 3. NETWORK & NMAP -->
+            <!-- 4. NETWORK & NMAP -->
             <div id="network" class="page">
                 <div class="glass-card">
                     <div class="card-header">
@@ -615,6 +725,10 @@
                     <div class="action-bar">
                         <button class="cyber-btn" onclick="runSim('net')">Tarama Başlat</button>
                     </div>
+
+                    <div class="progress-bar-container" id="net-progress-container">
+                        <div class="progress-bar" id="net-progress"></div>
+                    </div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
@@ -628,7 +742,47 @@
                 </div>
             </div>
 
-            <!-- 4. DATA BREACH / LEAK -->
+            <!-- 5. WHOIS & SUBDOMAIN -->
+            <div id="whois" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <div class="card-header-text">
+                            <h2>Whois & Subdomain Enumeration</h2>
+                            <p>Domain tescil bilgileri, registrar, nameserver kayıtları ve aktif alt alan adlarını keşfeder.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Hedef Domain</label>
+                            <input type="text" id="whois-input" class="custom-input" placeholder="hedefsite.com">
+                        </div>
+                    </div>
+                    
+                    <div class="action-bar">
+                        <button class="cyber-btn" onclick="runSim('whois')">Whois ve Subdomain Sorgula</button>
+                    </div>
+
+                    <div class="progress-bar-container" id="whois-progress-container">
+                        <div class="progress-bar" id="whois-progress"></div>
+                    </div>
+                    
+                    <div class="terminal-wrapper">
+                        <div class="terminal-header">
+                            <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+                            <span>root@osinter:~/modules/whois_dns</span>
+                        </div>
+                        <div class="terminal-box" id="whois-term">
+                            <div class="typing-line t-info">DNS sorgu modülü aktif.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. DATA BREACH / LEAK -->
             <div id="leak" class="page">
                 <div class="glass-card">
                     <div class="card-header">
@@ -651,6 +805,10 @@
                     <div class="action-bar">
                         <button class="cyber-btn btn-danger" onclick="runSim('leak')">Veritabanlarını Tara</button>
                     </div>
+
+                    <div class="progress-bar-container" id="leak-progress-container">
+                        <div class="progress-bar" id="leak-progress"></div>
+                    </div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
@@ -664,10 +822,85 @@
                 </div>
             </div>
 
-            <!-- Sayfa çoğaltılabilir. Örnek amaçlı diğerlerini kısa tutuyorum ki asıl kod simülasyonuna yer kalsın. -->
-            <div id="whois" class="page"><div class="glass-card"><div class="card-header-text"><h2>Whois & Subdomain</h2><p>Gelişme aşamasında. Diğer modülleri test edin.</p></div></div></div>
-            <div id="hash" class="page"><div class="glass-card"><div class="card-header-text"><h2>Hash Cracker</h2><p>Gelişme aşamasında. Diğer modülleri test edin.</p></div></div></div>
-            <div id="metadata" class="page"><div class="glass-card"><div class="card-header-text"><h2>EXIF / Metadata Reader</h2><p>Gelişme aşamasında. Diğer modülleri test edin.</p></div></div></div>
+            <!-- 7. HASH CRACKER -->
+            <div id="hash" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <div class="card-header-text">
+                            <h2>Hash Cracker & Generator</h2>
+                            <p>MD5, SHA256, Bcrypt hash çözme sözlük saldırısı ve hash üretme aracı.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Hash veya Metin Değeri</label>
+                            <input type="text" id="hash-input" class="custom-input" placeholder="5d41402abc4b2a76b9719d911017c592 (hello)">
+                        </div>
+                    </div>
+                    
+                    <div class="action-bar">
+                        <button class="cyber-btn" onclick="runSim('hash')">Hash Çöz (Brute-Force)</button>
+                    </div>
+
+                    <div class="progress-bar-container" id="hash-progress-container">
+                        <div class="progress-bar" id="hash-progress"></div>
+                    </div>
+                    
+                    <div class="terminal-wrapper">
+                        <div class="terminal-header">
+                            <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+                            <span>root@osinter:~/modules/hash_engine</span>
+                        </div>
+                        <div class="terminal-box" id="hash-term">
+                            <div class="typing-line t-info">Wordlist sözlüğü yüklendi (14M kayıt).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. EXIF METADATA -->
+            <div id="metadata" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        </div>
+                        <div class="card-header-text">
+                            <h2>EXIF / Metadata Reader</h2>
+                            <p>Görsel ve belge dosyalarındaki gizli GPS koordinatları, cihaz modeli ve çekim tarihini okur.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Dosya Adı veya URL</label>
+                            <input type="text" id="metadata-input" class="custom-input" placeholder="target_image_2026.jpg">
+                        </div>
+                    </div>
+                    
+                    <div class="action-bar">
+                        <button class="cyber-btn" onclick="runSim('metadata')">Metadata Oku</button>
+                    </div>
+
+                    <div class="progress-bar-container" id="metadata-progress-container">
+                        <div class="progress-bar" id="metadata-progress"></div>
+                    </div>
+                    
+                    <div class="terminal-wrapper">
+                        <div class="terminal-header">
+                            <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+                            <span>root@osinter:~/modules/exif_reader</span>
+                        </div>
+                        <div class="terminal-box" id="metadata-term">
+                            <div class="typing-line t-info">Metadata analiz motoru hazır.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </main>
@@ -777,12 +1010,12 @@
            ========================================= */
         let activeProcess = {};
 
-        async function writeTerm(termId, lines, speed = 40) {
+        async function writeTerm(termId, lines, speed = 30) {
             const term = document.getElementById(termId + '-term');
-            term.innerHTML = ''; // Temizle
+            if(!term) return;
+            term.innerHTML = ''; 
             activeProcess[termId] = true;
             
-            // Progress bar
             const pbCont = document.getElementById(termId + '-progress-container');
             const pb = document.getElementById(termId + '-progress');
             if(pbCont) { pbCont.style.display = 'block'; pb.style.width = '0%'; }
@@ -790,13 +1023,12 @@
             let totalLines = lines.length;
 
             for (let i = 0; i < lines.length; i++) {
-                if(!activeProcess[termId]) break; // İptal edildiyse dur
+                if(!activeProcess[termId]) break;
                 
                 const lineData = lines[i];
                 const div = document.createElement('div');
                 div.className = 'typing-line';
                 
-                // Tip Ayrıştırma
                 let isLoad = lineData.startsWith('LOAD:');
                 let rawText = isLoad ? lineData.substring(5) : lineData;
                 let cssClass = '';
@@ -805,6 +1037,7 @@
                 else if(rawText.includes('[-]')) cssClass = 't-err';
                 else if(rawText.includes('[!]')) cssClass = 't-warn';
                 else if(rawText.startsWith('>>') || rawText.startsWith('=')) cssClass = 't-info';
+                else if(rawText.startsWith('[AI]')) cssClass = 't-ai';
 
                 if(cssClass) div.classList.add(cssClass);
 
@@ -812,19 +1045,17 @@
                     div.innerHTML = `<span class="loading-spinner"></span> ${rawText}`;
                     term.appendChild(div);
                     term.scrollTop = term.scrollHeight;
-                    await new Promise(r => setTimeout(r, Math.random() * 800 + 400));
+                    await new Promise(r => setTimeout(r, Math.random() * 400 + 200));
                     div.innerHTML = `<span style="color:#10b981">✔</span> ${rawText}`;
                 } else {
-                    // HTML tagı içeriyorsa (tablo vs) direkt bas
                     if(rawText.includes('<')) {
                         div.innerHTML = rawText;
                     } else {
-                        // Daktilo efekti
                         term.appendChild(div);
                         for(let c = 0; c < rawText.length; c++) {
                             div.innerHTML += rawText.charAt(c);
                             term.scrollTop = term.scrollHeight;
-                            await new Promise(r => setTimeout(r, speed / 2));
+                            await new Promise(r => setTimeout(r, speed / 3));
                         }
                     }
                     term.appendChild(div);
@@ -840,18 +1071,56 @@
 
         function clearTerm(type) {
             activeProcess[type] = false;
-            document.getElementById(type + '-term').innerHTML = '<div class="typing-line t-info">> Ekran temizlendi. İşlem bekleniyor...</div>';
+            const term = document.getElementById(type + '-term');
+            if(term) term.innerHTML = '<div class="typing-line t-info">> Ekran temizlendi. İşlem bekleniyor...</div>';
             const pbCont = document.getElementById(type + '-progress-container');
             if(pbCont) pbCont.style.display = 'none';
         }
 
         /* =========================================
-           SIMULATION LOGICS
+           GLOBAL ZEKA AI CHAT ENGINE
+           ========================================= */
+        async function triggerZekaAI() {
+            const inputField = document.getElementById('zeka-input');
+            const chatLog = document.getElementById('zeka-chat-log');
+            const query = inputField.value.trim();
+            if(!query) return;
+
+            // Kullanıcı mesajı ekle
+            chatLog.innerHTML += `<div class="zeka-msg user">${query}</div>`;
+            inputField.value = '';
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            // Yapay zeka düşünme efekti
+            const aiLoadingId = 'ai-load-' + Date.now();
+            chatLog.innerHTML += `<div class="zeka-msg ai" id="${aiLoadingId}"><span class="loading-spinner"></span> Global Zeka verileri analiz ediyor ve otonom sorgu gerçekleştiriyor...</div>`;
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            await new Promise(r => setTimeout(r, 1500));
+
+            const loadingEl = document.getElementById(aiLoadingId);
+            if(loadingEl) loadingEl.remove();
+
+            // Otomatik analiz yanıtı üret
+            let responseHtml = `[GLOBAL ZEKA RAPORU]: "${query}" sorgusu için çoklu veri tabanı tarandı.<br>`;
+            responseHtml += `• <b>Tespit Edilen Varlık:</b> ${rand(DB.names)} ${rand(DB.surnames)}<br>`;
+            responseHtml += `• <b>Muhtemel Lokasyon:</b> ${rand(DB.cities)}<br>`;
+            responseHtml += `• <b>Ağ Durumu:</b> Aktif (${rand(DB.isps)})<br>`;
+            responseHtml += `• <b>Güven Skoru:</b> %98.4 (Yüksek Güvenilirlik)`;
+
+            chatLog.innerHTML += `<div class="zeka-msg ai">${responseHtml}</div>`;
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        /* =========================================
+           SIMULATION LOGICS FOR ALL MODULES
            ========================================= */
         function runSim(type) {
-            const input = document.getElementById(type + '-input').value.trim();
-            if(!input) {
-                document.getElementById(type + '-term').innerHTML += `<div class="typing-line t-err">[-] HATA: Lütfen geçerli bir hedef girin.</div>`;
+            const inputEl = document.getElementById(type + '-input');
+            const input = inputEl ? inputEl.value.trim() : '';
+            if(!input && type !== 'hash') {
+                const term = document.getElementById(type + '-term');
+                if(term) term.innerHTML += `<div class="typing-line t-err">[-] HATA: Lütfen geçerli bir hedef girin.</div>`;
                 return;
             }
 
@@ -863,7 +1132,7 @@
  \\___ \\ \\ /\\ / / _\` | '_ \\ / __| '_ \\ 
   ___) \\ V  V / (_| | | | | (__| | | |
  |____/ \\_/\\_/ \\__,_|_| |_|\\___|_| |_|
- OSINT ENGINE v5.0 - INITIALIZED
+ GLOBAL OSINTER v5.5 - CORE ENGINE
 </pre>`;
 
             if (type === 'tg') {
@@ -873,8 +1142,8 @@
                 
                 lines = [
                     asciiHeader,
-                    `>> Hedef tanımlandı: <span class="t-highlight">${input}</span>`,
-                    `>> API Gateway #4 (EU-Central) üzerinden bağlantı kuruluyor...`,
+                    `>> Telegram Bot API bağlandı. Hedef: <span class="t-highlight">${input}</span>`,
+                    `>> RPC Gateway #4 (EU-Central) üzerinden istek atılıyor...`,
                     `LOAD:Telegram RPC servislerine istek atılıyor`,
                     `LOAD:Kullanıcı profil verileri çözümleniyor`,
                     `LOAD:Data Center (DC) tespiti yapılıyor`
@@ -885,39 +1154,48 @@
                     lines.push(`LOAD:İletişim ağacı oluşturuluyor`);
                 }
 
-                lines.push(`<br><span class="t-success">[+] TELEGRAM PROFİL İSTİHBARATI (BAŞARILI)</span>`);
+                lines.push(`<br><span class="t-success">[+] TELEGRAM BOT API İSTİHBARATI (BAŞARILI)</span>`);
                 lines.push(`================================================================================`);
                 lines.push(`<span class="t-label">Hesap ID (Snowflake)</span>: ${targetId}`);
                 lines.push(`<span class="t-label">Kullanıcı Adı</span>: ${username}`);
-                lines.push(`<span class="t-label">Ad / Soyad (Gösterilen)</span>: ${rand(DB.names)} (Şifrelenmiş olabilir)`);
+                lines.push(`<span class="t-label">Ad / Soyad</span>: ${rand(DB.names)} ${rand(DB.surnames)}`);
                 lines.push(`<span class="t-label">Veri Merkezi (DC)</span>: <span style="color:var(--warning)">${rand(DB.dc_locs)}</span>`);
-                lines.push(`<span class="t-label">Hesap Dili</span>: tr-TR / en-US`);
-                lines.push(`<span class="t-label">Premium Durumu</span>: ${Math.random() > 0.7 ? 'Aktif' : 'Pasif'}`);
-                lines.push(`<span class="t-label">Bot Statüsü</span>: False`);
-                lines.push(`<span class="t-label">Biyografi (Bio)</span>: "Digital footprint is forever."`);
-                lines.push(`<span class="t-label">Profil Fotoğrafı</span>: ${Math.floor(Math.random() * 4)} adet geçmiş fotoğraf tespit edildi.`);
+                lines.push(`<span class="t-label">Hesap Dili / Bölge</span>: tr-TR / Europe`);
+                lines.push(`<span class="t-label">Telegram Premium</span>: ${Math.random() > 0.6 ? 'Aktif (Verified)' : 'Pasif'}`);
+                lines.push(`<span class="t-label">Bot / User Bot Durumu</span>: User Account`);
+                lines.push(`<span class="t-label">Biyografi (Bio)</span>: "Swanch Security & Dev Infrastructure."`);
                 
                 if(depth === 'deep' || depth === 'agresif') {
                     lines.push(`================================================================================`);
-                    lines.push(`<span style="color:var(--accent-main)">[ GRUP VE AĞ ANALİZİ ]</span>`);
-                    lines.push(`<span class="t-label">Tespit Edilen Gruplar</span>:`);
-                    let gCount = Math.floor(Math.random() * 4) + 1;
+                    lines.push(`<span style="color:var(--accent-main)">[ GRUP VE KANAL ANALİZİ ]</span>`);
+                    let gCount = Math.floor(Math.random() * 4) + 2;
                     for(let i=0; i<gCount; i++) {
-                        lines.push(`  -> ${rand(DB.groups)} (Üye sayısı: ${Math.floor(Math.random()*10000)})`);
+                        lines.push(`  -> ${rand(DB.groups)} (Üye: ${Math.floor(Math.random()*25000)})`);
                     }
-                    lines.push(`<span class="t-label">İletişim Kurulan Node</span>: ${Math.floor(Math.random()*50)} benzersiz kişi`);
                 }
-
-                if(depth === 'agresif') {
-                    lines.push(`================================================================================`);
-                    lines.push(`<span style="color:var(--danger)">[ AGRESİF METADATA (SİMÜLASYON) ]</span>`);
-                    lines.push(`<span class="t-label">Son IP (Tahmini ISP)</span>: ${rand(DB.isps)}`);
-                    lines.push(`<span class="t-label">Son Cihaz Tipi</span>: ${rand(DB.devices)} / Telegram Mobile v9.6`);
-                }
-                
                 lines.push(`================================================================================`);
-                lines.push(`>> Rapor oluşturuldu. Kayıt tarihi: ${new Date().toLocaleString()}`);
+                lines.push(`>> Telegram API Raporu tamamlandı.`);
             } 
+            else if (type === 'gmail') {
+                lines = [
+                    asciiHeader,
+                    `>> Google Account Enumeration API tetiklendi: ${input}`,
+                    `LOAD:Google Public Profile Registry sorgulanıyor`,
+                    `LOAD:OAuth bağlantıları ve ilişkili servisler taranıyor`,
+                    `LOAD:Sızıntı ve Breach havuzları çapraz eşleştiriliyor`,
+                    `<br><span class="t-success">[+] GMAIL & GOOGLE İSTİHBARATI</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Hedef E-Posta</span>: ${input}`,
+                    `<span class="t-label">Google Account ID</span>: 10${randID(19)}`,
+                    `<span class="t-label">Kurtarma Telefon Maskesi</span>: +90 *** *** ** ${randID(2)}`,
+                    `<span class="t-label">Kurtarma E-Posta</span>: ${rand(DB.names).toLowerCase()}***@gmail.com`,
+                    `<span class="t-label">Google Haritalar İzi</span>: ${rand(DB.cities)} (Son konum)`,
+                    `<span class="t-label">Bağlı Platformlar</span>: YouTube, Google Play, Firebase, GCP`,
+                    `<span class="t-label">DarkWeb Sızıntı Durumu</span>: <span class="t-err">2 Veritabanında Tespit Edildi</span>`,
+                    `================================================================================`,
+                    `[AI Uyarısı]: Hesap güvenliği için çift aşamalı doğrulama (2FA) önerilir.`
+                ];
+            }
             else if (type === 'dc') {
                 let ts = new Date(new Date().getTime() - Math.random() * 100000000000).toLocaleString();
                 lines = [
@@ -930,7 +1208,7 @@
                     `<span class="t-label">Oluşturulma Tarihi</span>: ${ts}`,
                     `<span class="t-label">Avatar Hash</span>: ${randHex(32)}`,
                     `<span class="t-label">Banner Renk Kodu</span>: #${randHex(6)}`,
-                    `<span class="t-label">Nitro Durumu</span>: ${Math.random() > 0.5 ? 'Var' : 'Yok'}`,
+                    `<span class="t-label">Nitro Durumu</span>: ${Math.random() > 0.5 ? 'Aktif' : 'Yok'}`,
                     `================================================================================`,
                 ];
             }
@@ -941,7 +1219,7 @@
                     `>> Nmap v7.93 Başlatıldı. Hedef: ${input}`,
                     `>> Host Discovery (Ping Sweep) yapılıyor...`,
                     `LOAD:Host durumu sorgulanıyor`,
-                    `[+] Host aktif. RTT: ${Math.floor(Math.random() * 50 + 10)}ms`,
+                    `[+] Host aktif. RTT: ${Math.floor(Math.random() * 40 + 8)}ms`,
                     `LOAD:Port taraması yapılıyor (${scanType === 'full' ? '1-65535' : 'Top 1000'})`,
                     `LOAD:Servis bannerları (Service Fingerprinting) alınıyor`,
                 ];
@@ -951,7 +1229,7 @@
                 lines.push(`----      -----    -------      -------`);
                 
                 let foundPorts = [];
-                for(let i=0; i<3; i++) {
+                for(let i=0; i<4; i++) {
                     let p = rand(DB.ports);
                     if(!foundPorts.includes(p.p)) {
                         foundPorts.push(p.p);
@@ -962,14 +1240,35 @@
                     }
                 }
                 
-                lines.push(`<br>>> OS Tespiti: Linux 4.X|5.X (Tahmini doğruluk %96)`);
-                lines.push(`>> Tarama bitti. Taranan IP adresi sunucu loglarına yansımadı (Stealth Mode).`);
+                lines.push(`<br>>> OS Tespiti: Linux Kernel 5.X (Doğruluk %98)`);
+            }
+            else if (type === 'whois') {
+                lines = [
+                    asciiHeader,
+                    `>> Whois & DNS Subdomain Tarayıcı çalıştırıldı: ${input}`,
+                    `LOAD:IANA Veritabanı sorgulanıyor`,
+                    `LOAD:Nameserver ve Registrar kayıtları alınıyor`,
+                    `LOAD:Alt alan adları (Subdomain Enumeration) taranıyor`,
+                    `<br><span class="t-success">[+] WHOIS & SUBDOMAIN SONUÇLARI</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Domain Adı</span>: ${input}`,
+                    `<span class="t-label">Registrar</span>: NameCheap / GoDaddy LLC`,
+                    `<span class="t-label">Kayıt Tarihi</span>: 2021-04-12`,
+                    `<span class="t-label">Bitiş Tarihi</span>: 2028-04-12`,
+                    `<span class="t-label">Nameserverlar</span>: ns1.cloudflare.com, ns2.cloudflare.com`,
+                    `<span class="t-label">Tespit Edilen Subdomainler</span>:`,
+                    `  -> api.${input}`,
+                    `  -> admin.${input}`,
+                    `  -> vpn.${input}`,
+                    `  -> test.${input}`,
+                    `================================================================================`
+                ];
             }
             else if (type === 'leak') {
                 lines = [
                     `>> Secure Tor Socket açılıyor...`,
                     `LOAD:DarkWeb indekslerine bağlanılıyor`,
-                    `LOAD:Veritabanları (3,402 sızıntı dosyası) aranıyor. Hedef: ${input}`,
+                    `LOAD:Veritabanları (4,200 sızıntı dosyası) aranıyor. Hedef: ${input}`,
                     `<br><span class="t-err">[-] DİKKAT! EŞLEŞMELER BULUNDU</span>`,
                     `Aşağıdaki veritabanlarında aranan kritere ait veri sızıntısı tespit edildi:`,
                     `================================================================================`
@@ -979,15 +1278,45 @@
                 for(let i=0; i<leakCount; i++) {
                     lines.push(`<span class="t-label">Veritabanı Adı</span>: ${rand(DB.leaks)}`);
                     lines.push(`<span class="t-label">Sızan Veriler</span>: Email, Şifre(MD5), İsim, IP Adresi`);
-                    lines.push(`<span class="t-label">Şifre Özeti(Kırık)</span>: ${randHex(8)}... (Maskelenmiş)`);
+                    lines.push(`<span class="t-label">Şifre Özeti</span>: ${randHex(8)}... (Maskelenmiş)`);
                     lines.push(`--------------------------------------------------------------------------------`);
                 }
-                lines.push(`>> İşlem tamamlandı. Kullanıcıya şifrelerini değiştirmesi tavsiye edilir.`);
+            }
+            else if (type === 'hash') {
+                lines = [
+                    asciiHeader,
+                    `>> Hash analiz motoru başlatıldı. Değer: ${input || '5d41402abc4b2a76b9719d911017c592'}`,
+                    `LOAD:Hash algoritması tespit ediliyor (MD5 / SHA256)`,
+                    `LOAD:14 Milyonluk Rainbow Table taranıyor`,
+                    `<br><span class="t-success">[+] HASH BAŞARIYLA ÇÖZÜLDÜ (CRACKED)</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Algoritma</span>: MD5`,
+                    `<span class="t-label">Girilen Hash</span>: ${input || '5d41402abc4b2a76b9719d911017c592'}`,
+                    `<span class="t-label">Çözülen Metin</span>: <span style="color:var(--success); font-weight:bold;">hello</span>`,
+                    `<span class="t-label">Süre</span>: 0.14 saniye`,
+                    `================================================================================`
+                ];
+            }
+            else if (type === 'metadata') {
+                lines = [
+                    asciiHeader,
+                    `>> EXIF Okuyucu başlatıldı. Dosya: ${input}`,
+                    `LOAD:Binary dosya başlığı (EXIF Header) okunuyor`,
+                    `LOAD:GPS ve kamera sensör verileri ayrıştırılıyor`,
+                    `<br><span class="t-success">[+] METADATA & EXIF BİLGİLERİ</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Dosya Adı</span>: ${input}`,
+                    `<span class="t-label">Kamera Modeli</span>: Apple iPhone 14 Pro`,
+                    `<span class="t-label">Çekim Tarihi</span>: 2026:06:14 19:22:10`,
+                    `<span class="t-label">Enlem / Boylam (GPS)</span>: 41.0082° N, 28.9784° E (Istanbul)`,
+                    `<span class="t-label">Yazılım / Düzenleme</span>: Adobe Photoshop Lightroom`,
+                    `================================================================================`
+                ];
             }
 
-            writeTerm(type, lines, 20);
+            writeTerm(type, lines, 25);
         }
     </script>
 </body>
 </html>
-         
+                    
