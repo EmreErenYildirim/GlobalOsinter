@@ -3,34 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLOBAL OSINTER - PROJECT</title>
+    <title>GLOBAL OSINTER - ULTIMATE AI & FORENSIC SUITE</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
     <style>
-        /* =========================================
-           ROOT VARIABLES & BASE RESET
-           ========================================= */
+        /* ==========================================================================
+           GLOBAL OSINTER - STYLESHEET CORE ENGINE
+           ========================================================================== */
         :root {
             --bg-base: #020617;
             --bg-panel: rgba(15, 23, 42, 0.88);
-            --bg-input: rgba(3, 7, 18, 0.75);
+            --bg-panel-solid: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.6);
+            --bg-input: rgba(3, 7, 18, 0.85);
             --border-primary: rgba(56, 189, 248, 0.25);
-            --border-glow: rgba(56, 189, 248, 0.6);
-            --border-focus: rgba(14, 165, 233, 0.9);
+            --border-glow: rgba(56, 189, 248, 0.65);
+            --border-focus: rgba(14, 165, 233, 0.95);
             --accent-main: #38bdf8;
             --accent-hover: #0ea5e9;
             --accent-glow: 0 0 25px rgba(56, 189, 248, 0.45);
-            --text-primary: #f1f5f9;
+            --accent-matrix: #22c55e;
+            --accent-purple: #a855f7;
+            --accent-amber: #f59e0b;
+            --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
             --success: #10b981;
             --danger: #f43f5e;
             --warning: #f59e0b;
             --info: #3b82f6;
-            --sidebar-width: 330px;
-            --header-height: 75px;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-code: 'Fira Code', 'Courier New', Courier, monospace;
-            --transition-fast: 0.2s ease;
-            --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --sidebar-width: 320px;
+            --header-height: 70px;
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-code: 'Fira Code', monospace;
+            --font-tech: 'Share Tech Mono', monospace;
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Matrix Theme Override */
+        body.theme-matrix {
+            --accent-main: #22c55e;
+            --accent-hover: #16a34a;
+            --border-primary: rgba(34, 197, 94, 0.3);
+            --border-glow: rgba(34, 197, 94, 0.7);
+            --accent-glow: 0 0 25px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Cyberpunk Theme Override */
+        body.theme-cyber {
+            --accent-main: #d946ef;
+            --accent-hover: #c026d3;
+            --border-primary: rgba(217, 70, 239, 0.3);
+            --border-glow: rgba(217, 70, 239, 0.7);
+            --accent-glow: 0 0 25px rgba(217, 70, 239, 0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,47 +72,38 @@
             display: flex;
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            user-select: none;
         }
 
-        /* =========================================
-           ADVANCED BACKGROUND & CANVAS EFFECTS
-           ========================================= */
-        #cyber-canvas {
+        /* BACKGROUND CANVASES */
+        #cyber-canvas, #matrix-canvas, #radar-canvas {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             z-index: 0;
             pointer-events: none;
-            background: radial-gradient(circle at 50% 50%, #06112a 0%, #020617 100%);
         }
+        #matrix-canvas, #radar-canvas { display: none; }
 
         .scanline {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, transparent 50%, rgba(56, 189, 248, 0.03) 51%);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.25) 51%);
             background-size: 100% 4px;
-            z-index: 1;
-            pointer-events: none;
+            z-index: 1; pointer-events: none; opacity: 0.6;
         }
 
         .vignette {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.85) 100%);
-            z-index: 2;
-            pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 35%, rgba(2, 6, 23, 0.92) 100%);
+            z-index: 2; pointer-events: none;
         }
 
-        /* =========================================
-           SIDEBAR & NAVIGATION
-           ========================================= */
+        /* SIDEBAR NAVIGATION */
         .sidebar-overlay {
             position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 99;
-            display: none; opacity: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 99; display: none; opacity: 0;
             transition: var(--transition-fast);
         }
         .sidebar-overlay.active { display: block; opacity: 1; }
@@ -91,9 +111,9 @@
         aside {
             width: var(--sidebar-width);
             background: var(--bg-panel);
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px);
             border-right: 1px solid var(--border-primary);
-            box-shadow: 10px 0 40px rgba(0,0,0,0.7);
+            box-shadow: 10px 0 50px rgba(0, 0, 0, 0.8);
             display: flex; flex-direction: column;
             z-index: 100; height: 100vh;
             transition: var(--transition-slow);
@@ -103,43 +123,46 @@
         .sidebar-header {
             height: var(--header-height);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 25px;
+            padding: 0 24px;
             border-bottom: 1px solid var(--border-primary);
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(15, 23, 42, 0.7);
         }
 
         .brand-container { display: flex; flex-direction: column; }
         
         .brand {
-            font-size: 1.35rem; font-weight: 900;
-            background: linear-gradient(135deg, #fff 0%, var(--accent-main) 100%);
+            font-size: 1.25rem; font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-main) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 1.5px;
+            font-family: var(--font-tech);
         }
-        .brand-sub { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+        .brand-sub { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-family: var(--font-code); }
 
         .user-badge {
-            font-size: 0.75rem; font-weight: 700;
+            font-size: 0.7rem; font-weight: 700;
             background: rgba(56, 189, 248, 0.1);
-            padding: 6px 14px; border-radius: 8px;
+            padding: 5px 12px; border-radius: 6px;
             border: 1px solid var(--border-primary);
             color: var(--accent-main);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+            box-shadow: var(--accent-glow);
+            font-family: var(--font-code);
         }
 
         .menu-list {
             flex: 1; overflow-y: auto;
-            padding: 20px 15px; list-style: none;
+            padding: 16px 12px; list-style: none;
         }
         .menu-list::-webkit-scrollbar { width: 4px; }
         .menu-list::-webkit-scrollbar-thumb { background: var(--border-primary); border-radius: 4px; }
 
         .menu-category {
-            font-size: 0.7rem; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 2.5px;
-            margin: 25px 15px 10px; font-weight: 800;
-            display: flex; align-items: center; gap: 10px;
+            font-size: 0.65rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 2px;
+            margin: 20px 12px 8px; font-weight: 800;
+            display: flex; align-items: center; gap: 8px;
+            font-family: var(--font-code);
         }
         .menu-category::after {
             content: ''; flex: 1; height: 1px;
@@ -147,11 +170,11 @@
         }
 
         .menu-item {
-            display: flex; align-items: center; gap: 16px;
-            padding: 14px 20px; margin-bottom: 6px;
-            border-radius: 12px; cursor: pointer;
+            display: flex; align-items: center; gap: 14px;
+            padding: 12px 16px; margin-bottom: 4px;
+            border-radius: 10px; cursor: pointer;
             color: var(--text-secondary); font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: var(--transition-fast);
             border: 1px solid transparent;
             position: relative; overflow: hidden;
@@ -159,478 +182,586 @@
 
         .menu-item::before {
             content: ''; position: absolute; left: 0; top: 0;
-            width: 4px; height: 100%;
+            width: 3px; height: 100%;
             background: var(--accent-main);
             transform: scaleY(0); transition: var(--transition-fast);
             border-radius: 0 4px 4px 0;
         }
 
-        .menu-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; transition: 0.3s; flex-shrink: 0; }
+        .menu-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; transition: 0.2s; flex-shrink: 0; }
         
         .menu-item:hover {
-            background: rgba(56, 189, 248, 0.05);
+            background: rgba(56, 189, 248, 0.08);
             color: var(--text-primary);
+            border-color: rgba(56, 189, 248, 0.15);
         }
         
         .menu-item.active {
-            background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, transparent 100%);
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.18) 0%, rgba(15, 23, 42, 0.4) 100%);
             color: var(--accent-main);
-            border-color: rgba(56, 189, 248, 0.1);
+            border-color: var(--border-primary);
         }
         .menu-item.active::before { transform: scaleY(1); }
         .menu-item.active svg { filter: drop-shadow(0 0 8px var(--accent-main)); }
 
         .ai-badge-menu {
-            margin-left: auto; font-size: 0.6rem; background: rgba(16, 185, 129, 0.2);
-            color: var(--success); padding: 2px 6px; border-radius: 4px; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.4);
+            margin-left: auto; font-size: 0.6rem; background: rgba(16, 185, 129, 0.15);
+            color: var(--success); padding: 2px 6px; border-radius: 4px; font-weight: 800;
+            border: 1px solid rgba(16, 185, 129, 0.3); font-family: var(--font-code);
         }
 
-        /* =========================================
-           MAIN LAYOUT & HEADER
-           ========================================= */
+        /* MAIN CONTENT LAYOUT */
         main {
             flex: 1; display: flex; flex-direction: column;
             z-index: 10; position: relative;
             height: 100vh; overflow-y: auto; scroll-behavior: smooth;
         }
         main::-webkit-scrollbar { width: 6px; }
-        main::-webkit-scrollbar-thumb { background: var(--bg-panel); border-radius: 6px; }
+        main::-webkit-scrollbar-thumb { background: rgba(30, 41, 59, 0.8); border-radius: 6px; }
 
         header.topbar {
             height: var(--header-height);
-            background: rgba(2, 6, 23, 0.75);
+            background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-primary);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 30px; position: sticky; top: 0; z-index: 50;
+            padding: 0 28px; position: sticky; top: 0; z-index: 50;
         }
 
-        .topbar-left { display: flex; align-items: center; gap: 20px; }
+        .topbar-left { display: flex; align-items: center; gap: 16px; }
 
         .menu-toggle {
             display: none; background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--border-primary);
-            color: var(--accent-main); padding: 10px 14px;
-            border-radius: 10px; cursor: pointer; font-size: 1.2rem;
+            color: var(--accent-main); padding: 8px 12px;
+            border-radius: 8px; cursor: pointer; font-size: 1.1rem;
             transition: var(--transition-fast);
         }
         .menu-toggle:hover { background: rgba(56, 189, 248, 0.15); }
 
+        .topbar-tools { display: flex; align-items: center; gap: 12px; }
+
+        .hud-btn {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-primary);
+            color: var(--text-secondary);
+            padding: 8px 14px; border-radius: 8px;
+            font-size: 0.75rem; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: var(--transition-fast); font-family: var(--font-code);
+        }
+        .hud-btn:hover, .hud-btn.active {
+            color: var(--accent-main); border-color: var(--accent-main);
+            background: rgba(56, 189, 248, 0.1);
+        }
+
         .system-status {
             display: flex; align-items: center; gap: 10px;
             background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 8px 18px; border-radius: 20px;
-            color: var(--success); font-size: 0.8rem; font-weight: 700;
-            letter-spacing: 1px; box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px; border-radius: 20px;
+            color: var(--success); font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 1px; font-family: var(--font-code);
         }
 
         .pulse-dot {
-            width: 10px; height: 10px;
+            width: 8px; height: 8px;
             background: var(--success); border-radius: 50%;
-            box-shadow: 0 0 12px var(--success);
+            box-shadow: 0 0 10px var(--success);
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        .content-container { padding: 40px; max-width: 1600px; margin: 0 auto; width: 100%; }
+        .content-container { padding: 30px; max-width: 1600px; margin: 0 auto; width: 100%; }
 
-        /* =========================================
-           CARDS & FORMS
-           ========================================= */
+        /* GLASS CARDS & FORMS */
         .glass-card {
             background: var(--bg-panel);
-            backdrop-filter: blur(30px);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--border-primary);
-            border-radius: 16px; padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75), inset 0 0 30px rgba(56, 189, 248, 0.03);
+            border-radius: 16px; padding: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(56, 189, 248, 0.02);
             position: relative; overflow: hidden;
             animation: slideUp var(--transition-slow);
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         .glass-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
             background: linear-gradient(90deg, transparent, var(--accent-main), transparent);
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .card-header {
-            display: flex; align-items: center; gap: 20px;
-            margin-bottom: 30px; padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 18px;
+            margin-bottom: 24px; padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
 
         .card-icon {
-            width: 50px; height: 50px;
+            width: 48px; height: 48px;
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid var(--border-primary);
-            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
             color: var(--accent-main); box-shadow: var(--accent-glow); flex-shrink: 0;
         }
-        .card-icon svg { width: 28px; height: 28px; stroke-width: 1.5; }
+        .card-icon svg { width: 24px; height: 24px; stroke-width: 1.8; }
 
-        .card-header-text h2 { font-size: 1.6rem; color: var(--text-primary); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px; }
-        .card-header-text p { font-size: 0.9rem; color: var(--text-muted); }
+        .card-header-text h2 { font-size: 1.4rem; color: var(--text-primary); font-weight: 800; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .card-header-text p { font-size: 0.85rem; color: var(--text-muted); }
 
-        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 30px; }
+        .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
         .input-grid-full { grid-template-columns: 1fr; }
 
-        .input-group { display: flex; flex-direction: column; gap: 12px; }
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
         .input-group label {
-            font-size: 0.85rem; color: var(--text-secondary);
+            font-size: 0.75rem; color: var(--text-secondary);
             font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+            font-family: var(--font-code);
         }
 
         .custom-input {
             width: 100%; background: var(--bg-input);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-primary); padding: 16px 20px;
-            border-radius: 12px; font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-primary); padding: 14px 18px;
+            border-radius: 10px; font-size: 0.95rem;
             transition: var(--transition-fast);
             font-family: var(--font-code);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
         }
         .custom-input::placeholder { color: #475569; }
         .custom-input:focus {
             outline: none; border-color: var(--border-focus);
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2), inset 0 2px 10px rgba(0,0,0,0.5);
-            background: rgba(3, 7, 18, 0.9);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.25), inset 0 2px 8px rgba(0,0,0,0.6);
+            background: rgba(3, 7, 18, 0.95);
         }
         
-        select.custom-input { appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
+        select.custom-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em;
+        }
 
-        .action-bar { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+        .action-bar { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
 
         .cyber-btn {
             background: linear-gradient(135deg, var(--accent-main), #0284c7);
-            color: #fff; border: 1px solid rgba(255,255,255,0.1);
-            padding: 16px 32px; border-radius: 12px;
-            font-weight: 800; font-size: 0.95rem; cursor: pointer;
+            color: #fff; border: 1px solid rgba(255,255,255,0.15);
+            padding: 14px 28px; border-radius: 10px;
+            font-weight: 800; font-size: 0.85rem; cursor: pointer;
             transition: var(--transition-fast);
-            display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
-            flex: 1; min-width: 200px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            text-transform: uppercase; letter-spacing: 1.2px;
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.25);
+            font-family: var(--font-code); flex: 1; min-width: 180px;
         }
-        .cyber-btn svg { width: 20px; height: 20px; }
+        .cyber-btn svg { width: 18px; height: 18px; }
         .cyber-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.45);
             background: linear-gradient(135deg, #0ea5e9, #0369a1);
         }
         .cyber-btn:active { transform: translateY(1px); }
 
         .btn-ghost {
-            background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255,255,255,0.1);
             box-shadow: none; color: var(--text-secondary);
         }
         .btn-ghost:hover { background: rgba(51, 65, 85, 0.8); color: #fff; border-color: rgba(255,255,255,0.2); box-shadow: none; }
         
         .btn-danger {
             background: linear-gradient(135deg, #e11d48, #9f1239);
-            box-shadow: 0 8px 25px rgba(225, 29, 72, 0.3);
+            box-shadow: 0 6px 20px rgba(225, 29, 72, 0.3);
         }
-        .btn-danger:hover { background: linear-gradient(135deg, #f43f5e, #be123c); box-shadow: 0 12px 30px rgba(225, 29, 72, 0.5); }
+        .btn-danger:hover { background: linear-gradient(135deg, #f43f5e, #be123c); box-shadow: 0 10px 25px rgba(225, 29, 72, 0.5); }
 
         .btn-ai {
             background: linear-gradient(135deg, #10b981, #047857);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
         }
-        .btn-ai:hover { background: linear-gradient(135deg, #34d399, #059669); box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5); }
+        .btn-ai:hover { background: linear-gradient(135deg, #34d399, #059669); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5); }
 
-        /* =========================================
-           TERMINAL CONSOLE (OUTPUT)
-           ========================================= */
+        .btn-voice {
+            background: linear-gradient(135deg, #a855f7, #7e22ce);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.3);
+        }
+        .btn-voice:hover { background: linear-gradient(135deg, #c084fc, #9333ea); box-shadow: 0 10px 25px rgba(168, 85, 247, 0.5); }
+        .btn-voice.recording { animation: pulseDanger 1s infinite alternate; }
+
+        @keyframes pulseDanger {
+            from { background: #e11d48; box-shadow: 0 0 15px #e11d48; }
+            to { background: #9f1239; box-shadow: 0 0 25px #f43f5e; }
+        }
+
+        /* TERMINAL CONSOLE */
         .terminal-wrapper {
             background: #020617; border: 1px solid #1e293b;
-            border-radius: 14px; overflow: hidden;
-            box-shadow: inset 0 5px 25px rgba(0,0,0,1);
+            border-radius: 12px; overflow: hidden;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.9);
             position: relative; margin-top: 10px;
         }
         
         .terminal-header {
-            background: #0f172a; padding: 10px 20px;
+            background: #0f172a; padding: 10px 18px;
             border-bottom: 1px solid #1e293b;
             display: flex; justify-content: space-between; align-items: center;
-            font-size: 0.75rem; color: #64748b; font-family: var(--font-main);
+            font-size: 0.75rem; color: #64748b; font-family: var(--font-code);
             text-transform: uppercase; letter-spacing: 1px;
         }
-        .terminal-controls { display: flex; gap: 8px; }
-        .t-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .terminal-controls { display: flex; gap: 6px; }
+        .t-dot { width: 10px; height: 10px; border-radius: 50%; }
         .t-red { background: #ef4444; } .t-yellow { background: #eab308; } .t-green { background: #22c55e; }
 
         .terminal-box {
-            padding: 25px; height: 480px; overflow-y: auto;
-            font-family: var(--font-code); font-size: 0.95rem;
-            color: #38bdf8; line-height: 1.7;
+            padding: 20px; height: 440px; overflow-y: auto;
+            font-family: var(--font-code); font-size: 0.9rem;
+            color: #38bdf8; line-height: 1.6;
             scrollbar-width: thin; scrollbar-color: #334155 #0f172a;
         }
-        .terminal-box::-webkit-scrollbar { width: 8px; }
+        .terminal-box::-webkit-scrollbar { width: 6px; }
         .terminal-box::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        .terminal-box::-webkit-scrollbar-track { background: #0f172a; }
 
         .typing-line { display: block; word-break: break-word; white-space: pre-wrap; margin-bottom: 4px; }
         .t-info { color: #94a3b8; }
         .t-success { color: #10b981; }
         .t-warn { color: #f59e0b; }
         .t-err { color: #f43f5e; font-weight: bold; }
-        .t-ai { color: #34d399; font-weight: bold; }
+        .t-ai { color: #a855f7; font-weight: bold; }
         .t-label { color: #f8fafc; font-weight: bold; display: inline-block; width: 180px; }
         .t-highlight { color: #fff; background: rgba(56, 189, 248, 0.2); padding: 0 4px; border-radius: 3px; }
 
         .loading-spinner {
-            display: inline-block; width: 16px; height: 16px;
+            display: inline-block; width: 14px; height: 14px;
             border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 50%;
             border-top-color: var(--accent-main);
-            animation: spin 0.8s linear infinite;
-            margin-right: 12px; vertical-align: middle;
+            animation: spin 0.7s linear infinite;
+            margin-right: 10px; vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .progress-bar-container { width: 100%; max-width: 400px; height: 6px; background: #1e293b; border-radius: 10px; overflow: hidden; margin: 10px 0; display: none; }
+        .progress-bar-container { width: 100%; height: 5px; background: #1e293b; border-radius: 10px; overflow: hidden; margin: 10px 0; display: none; }
         .progress-bar { height: 100%; background: var(--accent-main); width: 0%; transition: width 0.2s; box-shadow: 0 0 10px var(--accent-main); }
 
-        /* =========================================
-           GLOBAL ZEKA CHAT INTERFACE WIDGET
-           ========================================= */
-        .zeka-chat-box {
-            display: flex; flex-direction: column; gap: 15px; margin-top: 15px;
+        /* GLOBAL AI REALTIME CHAT INTERFACE */
+        .zeka-container { display: flex; flex-direction: column; gap: 16px; }
+        
+        .ai-status-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 12px 20px; border-radius: 12px; font-family: var(--font-code); font-size: 0.85rem;
         }
+        .ai-voice-wave { display: flex; align-items: center; gap: 4px; height: 20px; }
+        .wave-bar { width: 3px; background: var(--success); height: 100%; border-radius: 2px; animation: wave 1s infinite ease-in-out; }
+        .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.6s; }
+        @keyframes wave { 0%, 100% { height: 4px; } 50% { height: 20px; } }
+
         .zeka-messages {
-            background: rgba(3, 7, 18, 0.9); border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 12px; padding: 20px; height: 320px; overflow-y: auto;
-            font-family: var(--font-code); font-size: 0.9rem; display: flex; flex-direction: column; gap: 12px;
+            background: rgba(3, 7, 18, 0.95); border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 14px; padding: 20px; height: 380px; overflow-y: auto;
+            font-family: var(--font-code); font-size: 0.9rem; display: flex; flex-direction: column; gap: 14px;
+            box-shadow: inset 0 4px 20px rgba(0,0,0,0.8);
         }
-        .zeka-msg { padding: 12px 16px; border-radius: 10px; max-width: 85%; line-height: 1.5; }
+        
+        .zeka-msg { padding: 14px 18px; border-radius: 12px; max-width: 85%; line-height: 1.6; word-break: break-word; }
         .zeka-msg.user { background: rgba(56, 189, 248, 0.15); align-self: flex-end; color: #fff; border: 1px solid rgba(56, 189, 248, 0.3); }
-        .zeka-msg.ai { background: rgba(16, 185, 129, 0.1); align-self: flex-start; color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .zeka-msg.ai { background: rgba(168, 85, 247, 0.12); align-self: flex-start; color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.3); }
+        .zeka-msg.system { background: rgba(16, 185, 129, 0.1); align-self: center; color: #34d399; font-size: 0.8rem; border: 1px solid rgba(16, 185, 129, 0.2); }
 
-        /* =========================================
-           PAGES & RESPONSIVE
-           ========================================= */
+        /* DASHBOARD METRICS GRID */
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .metric-card {
+            background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-primary);
+            border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px;
+        }
+        .metric-title { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-code); }
+        .metric-value { font-size: 1.8rem; font-weight: 900; color: var(--accent-main); font-family: var(--font-tech); }
+        .metric-sub { font-size: 0.7rem; color: var(--success); display: flex; align-items: center; gap: 4px; }
+
+        /* PAGES & ANIMATIONS */
         .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
 
+        /* RESPONSIVE DESIGN */
         @media (max-width: 1200px) {
             .input-grid { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 992px) {
             aside { position: fixed; left: -100%; }
             aside.open { left: 0; }
             .menu-toggle { display: block; }
-            .content-container { padding: 20px; }
-            .glass-card { padding: 25px; }
+            .content-container { padding: 16px; }
+            .glass-card { padding: 20px; }
             .cyber-btn { width: 100%; flex: none; }
         }
-        
         @media (max-width: 480px) {
-            .terminal-box { font-size: 0.8rem; padding: 15px; height: 350px; }
-            .t-label { width: 130px; }
-            .card-header-text h2 { font-size: 1.3rem; }
-            header.topbar { padding: 0 15px; }
+            .terminal-box { font-size: 0.8rem; padding: 14px; height: 320px; }
+            .t-label { width: 120px; }
+            .card-header-text h2 { font-size: 1.2rem; }
+            header.topbar { padding: 0 14px; }
+            .hud-btn span { display: none; }
         }
-
     </style>
 </head>
 <body>
 
-    <!-- Cyber Background -->
+    <!-- CANVASES FOR DYNAMIC GRAPHICS -->
     <canvas id="cyber-canvas"></canvas>
+    <canvas id="matrix-canvas"></canvas>
+    <canvas id="radar-canvas"></canvas>
+    
     <div class="scanline"></div>
     <div class="vignette"></div>
     
-    <!-- Mobile Overlay -->
+    <!-- MOBILE OVERLAY -->
     <div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR NAVIGATION -->
     <aside id="sidebar">
         <div class="sidebar-header">
-        <div class="brand-container">
-                <span class="brand">OSINTER V5.5</span>
-                <span class="brand-sub">Ultimate Edition</span>
+            <div class="brand-container">
+                <span class="brand">GLOBAL OSINTER</span>
+                <span class="brand-sub">Ultimate AI & Forensic</span>
             </div>
             <span class="user-badge">@SwanchOrj</span>
         </div>
         
         <ul class="menu-list">
-            <div class="menu-category">Yapay Zeka Çekirdeği</div>
-            
-            <li class="menu-item active" onclick="navigate('zeka', this)">
+            <div class="menu-category">Çekirdek & Asistan</div>
+            <li class="menu-item active" onclick="navigate('dashboard', this)">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Sistem Kontrol Paneli</span>
+            </li>
+            <li class="menu-item" onclick="navigate('zeka', this)">
                 <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 7.54 16.54l-1.41-1.41A8 8 0 1 0 12 20v2a10 10 0 1 1 0-20z"/><path d="M12 6v6l4 2"/></svg>
-                <span>GLOBAL ZEKA (AI)</span>
-                <span class="ai-badge-menu">AUTO</span>
+                <span>GLOBAL ZEKA (Canlı AI)</span>
+                <span class="ai-badge-menu">VOICE</span>
             </li>
 
             <div class="menu-category">Sosyal Medya İstihbaratı</div>
-            
             <li class="menu-item" onclick="navigate('telegram', this)">
                 <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                <span>Telegram Derin Sorgu</span>
+                <span>Telegram Derin Recon</span>
             </li>
-            
-            <li class="menu-item" onclick="navigate('discord', this)">
-                <svg viewBox="0 0 24 24"><path d="M18 6h0a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h12z"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg>
-                <span>Discord Forensic</span>
-            </li>
-
             <li class="menu-item" onclick="navigate('gmail', this)">
                 <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                <span>Gmail & Google OSINT</span>
-                <span class="ai-badge-menu" style="background:rgba(56,189,248,0.2); color:var(--accent-main); border-color:var(--border-primary);">NEW</span>
+                <span>Gmail & Google Account</span>
+            </li>
+            <li class="menu-item" onclick="navigate('discord', this)">
+                <svg viewBox="0 0 24 24"><path d="M18 6h0a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h12z"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg>
+                <span>Discord Forensic & Token</span>
             </li>
 
-            <div class="menu-category">Ağ & Altyapı Analizi</div>
-            
+            <div class="menu-category">Ağ & Tehdit Analizi</div>
             <li class="menu-item" onclick="navigate('network', this)">
-                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-                <span>Gelişmiş IP & Nmap</span>
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                <span>Gelişmiş Nmap & Port</span>
             </li>
-            
             <li class="menu-item" onclick="navigate('whois', this)">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                <span>Whois & Subdomain</span>
+                <span>Whois & Subdomain Recon</span>
+            </li>
+            <li class="menu-item" onclick="navigate('geoip', this)">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>IP Geolocation & Threat</span>
             </li>
 
-            <div class="menu-category">Veri İhlali & Güvenlik</div>
-            
+            <div class="menu-category">Veri İhlali & Kriptografi</div>
             <li class="menu-item" onclick="navigate('leak', this)">
                 <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-                <span>DeepWeb Data Breach</span>
+                <span>DarkWeb Breach Scanner</span>
+            </li>
+            <li class="menu-item" onclick="navigate('hash', this)">
+                <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Hash Cracker & Engine</span>
+            </li>
+            <li class="menu-item" onclick="navigate('dork', this)">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Google Dork Generator</span>
             </li>
 
-            <li class="menu-item" onclick="navigate('hash', this)">
-                <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                <span>Hash Cracker / Gen</span>
-            </li>
-            
-            <div class="menu-category">Araçlar</div>
-            
+            <div class="menu-category">Adli Bilişim Araçları</div>
             <li class="menu-item" onclick="navigate('metadata', this)">
-                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>EXIF / Metadata Reader</span>
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span>EXIF & Media Forensics</span>
+            </li>
+            <li class="menu-item" onclick="navigate('terminal', this)">
+                <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                <span>İnteraktif Linux Shell</span>
             </li>
         </ul>
     </aside>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN VIEWPORT -->
     <main>
         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" onclick="toggleMenu()">
-                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
+                <div class="system-status">
+                    <div class="pulse-dot"></div>
+                    GLOBAL ZEKA: ONLINE (VOICE READY)
+                </div>
             </div>
-            <div class="system-status">
-                <div class="pulse-dot"></div>
-                GLOBAL ZEKA & API ÇEVRİMİÇİ
+
+            <div class="topbar-tools">
+                <button class="hud-btn" id="audio-toggle-btn" onclick="toggleAudioFX()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                    <span>SES: AÇIK</span>
+                </button>
+                <button class="hud-btn" onclick="cycleBgMode()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <span>EFEKT</span>
+                </button>
             </div>
         </header>
 
         <div class="content-container">
             
-            <!-- 0. GLOBAL ZEKA (AI CORE) -->
-            <div id="zeka" class="page active">
+            <!-- 0. DASHBOARD -->
+            <div id="dashboard" class="page active">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-title">Toplam İndekslenmiş Veri</span>
+                        <span class="metric-value">14.8 B+</span>
+                        <span class="metric-sub">✔ Küresel Sızıntı Havuzu Güncel</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-title">Aktif Node Motorları</span>
+                        <span class="metric-value">128</span>
+                        <span class="metric-sub">✔ Tor / I2P / RPC Aktif</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-title">AI Yanıt Gecikmesi</span>
+                        <span class="metric-value">12 ms</span>
+                        <span class="metric-sub">✔ Sinir Ağı Entegre</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-title">Güvenlik Tarama Modu</span>
+                        <span class="metric-value" style="color:var(--success)">ULTRA</span>
+                        <span class="metric-sub">✔ Adli Bilişim Düzeyi</span>
+                    </div>
+                </div>
+
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon" style="color:var(--success); border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.1);">
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                        <div class="card-header-text">
+                            <h2>GLOBAL OSINTER ULTIMATE PLATFORM</h2>
+                            <p>Tüm adli bilişim, sızma testi, sosyal medya istihbaratı ve yapay zeka araçları tek bir gelişmiş arayüzde birleştirildi.</p>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-secondary); line-height:1.7; font-size:0.95rem;">
+                        Hoş geldiniz. Bu platform; <b>Telegram, Gmail, Discord, Nmap, DarkWeb Sızıntıları ve Hash Algoritmaları</b> üzerinde derin adli analiz gerçekleştirmek için inşa edilmiştir. Soldaki menüden istediğiniz modüle erişebilir veya <b>GLOBAL ZEKA</b> ile sesli/yazılı konuşarak otonom taramalar yaptırabilirsiniz.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 1. GLOBAL ZEKA (VOICE & TEXT AI) -->
+            <div id="zeka" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="color:var(--accent-purple); border-color:rgba(168,85,247,0.3); background:rgba(168,85,247,0.1);">
                             <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 1 7.54 16.54l-1.41-1.41A8 8 0 1 0 12 20v2a10 10 0 1 1 0-20z"/><path d="M12 6v6l4 2"/></svg>
                         </div>
                         <div class="card-header-text">
-                            <h2>GLOBAL ZEKA - Otonom AI Asistanı</h2>
-                            <p>Tüm OSINT modüllerini gerçek zamanlı yöneten, hedef analizi yapan ve otomatik rapor üreten akıllı sinir ağı.</p>
+                            <h2>GLOBAL ZEKA - Gerçek Zamanlı Sesli Asistan</h2>
+                            <p>Bizimle canlı sesli veya yazılı konuşabilen, sistem komutlarını otonom yürüten yapay zeka çekirdeği.</p>
                         </div>
                     </div>
-                    
-                    <div class="zeka-chat-box">
-                        <div class="zeka-messages" id="zeka-chat-log">
-                            <div class="zeka-msg ai">[GLOBAL ZEKA v5.5]: Sistemler aktif. Hangi hedef veya veri kümesi üzerinde otonom tarama başlatmamı istersiniz? (Örn: "Ahmet Yılmaz için tüm ağları tarat" veya bir IP/Email girin)</div>
+
+                    <div class="zeka-container">
+                        <div class="ai-status-bar">
+                            <span id="ai-status-text">▶ Yapay Zeka Dinlemeye ve Komut Almaya Hazır</span>
+                            <div class="ai-voice-wave">
+                                <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                            </div>
                         </div>
-                        <div class="input-grid" style="grid-template-columns: 1fr auto; gap: 15px; margin-bottom: 0;">
-                            <input type="text" id="zeka-input" class="custom-input" placeholder="Global Zeka'ya komut verin veya hedef yazın..." onkeypress="if(event.key==='Enter') triggerZekaAI()">
-                            <button class="cyber-btn btn-ai" onclick="triggerZekaAI()" style="min-width: 140px; margin: 0;">Emir Gönder</button>
+
+                        <div class="zeka-messages" id="zeka-chat-log">
+                            <div class="zeka-msg system">[SİSTEM]: Global Zeka v14 Sinir Motorı başlatıldı. Mikrofon butonuna basarak doğrudan konuşabilir veya metin kutusundan emrinizi verebilirsiniz.</div>
+                            <div class="zeka-msg ai">[GLOBAL ZEKA]: Merhaba! Ben Global Zeka. Bugün hangi hedef üzerinde adli bilişim ve OSINT taraması yapmak istersiniz?</div>
+                        </div>
+
+                        <div class="input-grid" style="grid-template-columns: 1fr auto auto; gap: 12px; margin-bottom:0;">
+                            <input type="text" id="zeka-input" class="custom-input" placeholder="Yapay zekaya emrinizi yazın veya konuşun..." onkeypress="if(event.key==='Enter') triggerZekaAI()">
+                            <button class="cyber-btn btn-voice" id="voice-rec-btn" onclick="toggleVoiceRecognition()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                                <span>SESLİ KONUŞ</span>
+                            </button>
+                            <button class="cyber-btn btn-ai" onclick="triggerZekaAI()">GÖNDER</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 1. TELEGRAM RECON -->
+            <!-- 2. TELEGRAM RECON -->
             <div id="telegram" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon">
-                            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
                         <div class="card-header-text">
                             <h2>Telegram Derin Sorgu & Bot API</h2>
-                            <p>Telegram Bot API altyapısı entegre edilmiş gerçek zamanlı kullanıcı, grup ve veri merkezi analizi.</p>
+                            <p>Kullanıcı adı, ID veya telefon numarası üzerinden Telegram veri merkezlerinden profil ve ilişki ağacı analizi.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
-                            <label>Hedef Kullanıcı Adı veya Telefon / ID</label>
+                            <label>Hedef Kullanıcı Adı / Telefon / ID</label>
                             <input type="text" id="tg-input" class="custom-input" placeholder="Örn: @swanchorj veya +905554443322">
                         </div>
                         <div class="input-group">
-                            <label>Tarama Derinliği</label>
+                            <label>Sorgu Seviyesi</label>
                             <select id="tg-depth" class="custom-input">
-                                <option value="fast">Hızlı Bot API (Profil & ID)</option>
-                                <option value="deep">Derin Tarama (Gruplar + İletişim Ağı)</option>
-                                <option value="agresif">Agresif (Real Data Center & Metadata Bridge)</option>
+                                <option value="fast">Hızlı Profil & ID Tespiti</option>
+                                <option value="deep">Derin Grup ve Kanal Analizi</option>
+                                <option value="agresif">Agresif (DC Bridge & Bot API Trace)</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="action-bar">
-                        <button class="cyber-btn" onclick="runSim('tg')">
-                            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg> Telegram API Bağlan & Analiz Et
-                        </button>
+                        <button class="cyber-btn" onclick="runSim('tg')">Telegram Analizini Başlat</button>
                         <button class="cyber-btn btn-ghost" onclick="clearTerm('tg')">Temizle</button>
                     </div>
 
-                    <div class="progress-bar-container" id="tg-progress-container">
-                        <div class="progress-bar" id="tg-progress"></div>
-                    </div>
+                    <div class="progress-bar-container" id="tg-progress-container"><div class="progress-bar" id="tg-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
-                            <span>root@osinter:~/modules/telegram_bot_api</span>
+                            <span>root@osinter:~/modules/telegram_recon</span>
                         </div>
-                        <div class="terminal-box" id="tg-term">
-                            <div class="typing-line t-info">Telegram Core API v9.6 bağlantısı hazır.</div>
-                            <div class="typing-line">Lütfen hedef belirleyip analizi başlatın.</div>
-                        </div>
+                        <div class="terminal-box" id="tg-term"><div class="typing-line t-info">Telegram Bot API RPC Gateway hazır.</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. GMAIL OSINT (BEST OF ERA) -->
+            <!-- 3. GMAIL OSINT -->
             <div id="gmail" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon" style="color:var(--accent-main); border-color:var(--border-primary);">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
                         <div class="card-header-text">
                             <h2>Gmail & Google Hesabı İstihbaratı</h2>
-                            <p>E-posta adresi üzerinden Google ID tespiti, kurtarma telefon/e-posta maskesi, sızıntı geçmişi ve platform bağlantıları.</p>
+                            <p>E-posta üzerinden Gaia ID tespiti, Google Haritalar izleri, kurtarma detayları maskelemesi ve servis bağlantıları.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
                             <label>Hedef Gmail Adresi</label>
-                            <input type="text" id="gmail-input" class="custom-input" placeholder="ornek@gmail.com">
+                            <input type="text" id="gmail-input" class="custom-input" placeholder="target@gmail.com">
                         </div>
                     </div>
                     
@@ -638,265 +769,321 @@
                         <button class="cyber-btn" onclick="runSim('gmail')">Gmail İstihbaratını Başlat</button>
                     </div>
 
-                    <div class="progress-bar-container" id="gmail-progress-container">
-                        <div class="progress-bar" id="gmail-progress"></div>
-                    </div>
+                    <div class="progress-bar-container" id="gmail-progress-container"><div class="progress-bar" id="gmail-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
-                            <span>root@osinter:~/modules/gmail_osint</span>
+                            <span>root@osinter:~/modules/gmail_intel</span>
                         </div>
-                        <div class="terminal-box" id="gmail-term">
-                            <div class="typing-line t-info">Google Auth & Public Enumeration Engine aktif...</div>
-                        </div>
+                        <div class="terminal-box" id="gmail-term"><div class="typing-line t-info">Google Auth & Public Registry Motoru Hazır.</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. DISCORD FORENSIC -->
+            <!-- 4. DISCORD FORENSIC -->
             <div id="discord" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon">
-                            <svg viewBox="0 0 24 24"><path d="M18 6h0a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h12z"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M18 6h0a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h12z"/><circle cx="8" cy="12" r="1"/><circle cx="16" cy="12" r="1"/></svg></div>
                         <div class="card-header-text">
-                            <h2>Discord Adli Bilişim (Forensic)</h2>
-                            <p>Discord Snowflake ID çözücü, hesap oluşturma tarihi, banner/avatar hash tespiti.</p>
+                            <h2>Discord Adli Bilişim & Snowflake Çözücü</h2>
+                            <p>Discord Snowflake ID çözümleme, avatar/banner hash çıkarma ve hesap oluşturma zaman damgası tespiti.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
-                            <label>Discord ID (Snowflake)</label>
-                            <input type="text" id="dc-input" class="custom-input" placeholder="Örn: 30104847120392192">
+                            <label>Discord User Snowflake ID</label>
+                            <input type="text" id="dc-input" class="custom-input" placeholder="Örn: 29849201948572019">
                         </div>
                     </div>
                     
                     <div class="action-bar">
-                        <button class="cyber-btn" onclick="runSim('dc')">Verileri Çek</button>
+                        <button class="cyber-btn" onclick="runSim('dc')">Discord Verilerini Çek</button>
                     </div>
 
-                    <div class="progress-bar-container" id="dc-progress-container">
-                        <div class="progress-bar" id="dc-progress"></div>
-                    </div>
+                    <div class="progress-bar-container" id="dc-progress-container"><div class="progress-bar" id="dc-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
-                            <span>root@osinter:~/modules/discord_tool</span>
+                            <span>root@osinter:~/modules/discord_forensic</span>
                         </div>
-                        <div class="terminal-box" id="dc-term">
-                            <div class="typing-line t-info">Discord API bypass modülü hazır.</div>
-                        </div>
+                        <div class="terminal-box" id="dc-term"><div class="typing-line t-info">Discord API Bypass & Snowflake Decoder Hazır.</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 4. NETWORK & NMAP -->
+            <!-- 5. NETWORK & NMAP -->
             <div id="network" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon">
-                            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div>
                         <div class="card-header-text">
-                            <h2>Gelişmiş Ağ & Port Tarayıcı</h2>
-                            <p>IP adresi üzerinden detaylı topoloji, açık portlar, servis banner çekimi ve ASN bilgisi.</p>
+                            <h2>Gelişmiş Nmap & Ağ Port Tarayıcısı</h2>
+                            <p>IP veya Hostname üzerinden banner grabbing, zafiyet taraması ve işletim sistemi tespiti.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
-                            <label>Hedef IP / Hostname</label>
-                            <input type="text" id="net-input" class="custom-input" placeholder="8.8.8.8 veya domain.com">
+                            <label>Hedef IP / Domain</label>
+                            <input type="text" id="net-input" class="custom-input" placeholder="8.8.8.8 veya target.com">
                         </div>
                         <div class="input-group">
-                            <label>Tarama Profili</label>
+                            <label>Tarama Tipi</label>
                             <select id="net-type" class="custom-input">
-                                <option value="stealth">Gizli Tarama (SYN Stealth)</option>
-                                <option value="full">Tam Tarama (1-65535 Portlar)</option>
-                                <option value="vuln">Zafiyet Taraması (Vuln Script)</option>
+                                <option value="stealth">SYN Stealth Scan (-sS)</option>
+                                <option value="full">Tam Port Taraması (1-65535)</option>
+                                <option value="vuln">Vulnerability NSE Scripts (-sV --script vuln)</option>
                             </select>
                         </div>
                     </div>
                     
                     <div class="action-bar">
-                        <button class="cyber-btn" onclick="runSim('net')">Tarama Başlat</button>
+                        <button class="cyber-btn" onclick="runSim('net')">Nmap Taramasını Başlat</button>
                     </div>
 
-                    <div class="progress-bar-container" id="net-progress-container">
-                        <div class="progress-bar" id="net-progress"></div>
-                    </div>
+                    <div class="progress-bar-container" id="net-progress-container"><div class="progress-bar" id="net-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
                             <span>root@osinter:~/modules/nmap_engine</span>
                         </div>
-                        <div class="terminal-box" id="net-term">
-                            <div class="typing-line t-info">Nmap simülasyon motoru hazır...</div>
-                        </div>
+                        <div class="terminal-box" id="net-term"><div class="typing-line t-info">Nmap v7.95 Raw Socket Engine Hazır.</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. WHOIS & SUBDOMAIN -->
+            <!-- 6. WHOIS & SUBDOMAIN -->
             <div id="whois" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
                         <div class="card-header-text">
-                            <h2>Whois & Subdomain Enumeration</h2>
-                            <p>Domain tescil bilgileri, registrar, nameserver kayıtları ve aktif alt alan adlarını keşfeder.</p>
+                            <h2>Whois & Subdomain Recon Engine</h2>
+                            <p>Domain tescil kayıtları, DNS kayıtları (A, MX, TXT, NS) ve gizli subdomain keşfi.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
                             <label>Hedef Domain</label>
-                            <input type="text" id="whois-input" class="custom-input" placeholder="hedefsite.com">
+                            <input type="text" id="whois-input" class="custom-input" placeholder="example.com">
                         </div>
                     </div>
                     
                     <div class="action-bar">
-                        <button class="cyber-btn" onclick="runSim('whois')">Whois ve Subdomain Sorgula</button>
+                        <button class="cyber-btn" onclick="runSim('whois')">Whois ve Subdomain Keşfet</button>
                     </div>
 
-                    <div class="progress-bar-container" id="whois-progress-container">
-                        <div class="progress-bar" id="whois-progress"></div>
-                    </div>
+                    <div class="progress-bar-container" id="whois-progress-container"><div class="progress-bar" id="whois-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
                             <span>root@osinter:~/modules/whois_dns</span>
                         </div>
-                        <div class="terminal-box" id="whois-term">
-                            <div class="typing-line t-info">DNS sorgu modülü aktif.</div>
-                        </div>
+                        <div class="terminal-box" id="whois-term"><div class="typing-line t-info">DNS Resolver & CRT.sh Certificate Log Engine Hazır.</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 6. DATA BREACH / LEAK -->
-            <div id="leak" class="page">
+            <!-- 7. GEOIP & THREAT INTEL -->
+            <div id="geoip" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon">
-                            <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
                         <div class="card-header-text">
-                            <h2>DeepWeb Data Breach Scanner</h2>
-                            <p>E-posta veya Telefon numarası ile bilinen sızdırılmış veritabanlarında arama yapar.</p>
+                            <h2>IP Geolocation & Threat Intel Mapper</h2>
+                            <p>IP adresinin tam enlem/boylam koordinatları, ISP, ASN, Proxy/VPN/Tor node durumu tespiti.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
-                            <label>E-Posta veya Telefon No</label>
-                            <input type="text" id="leak-input" class="custom-input" placeholder="isim@domain.com">
+                            <label>Hedef IP Adresi</label>
+                            <input type="text" id="geoip-input" class="custom-input" placeholder="185.220.101.5">
                         </div>
                     </div>
                     
                     <div class="action-bar">
-                        <button class="cyber-btn btn-danger" onclick="runSim('leak')">Veritabanlarını Tara</button>
+                        <button class="cyber-btn" onclick="runSim('geoip')">Konum ve Tehdit Haritalandır</button>
                     </div>
 
-                    <div class="progress-bar-container" id="leak-progress-container">
-                        <div class="progress-bar" id="leak-progress"></div>
-                    </div>
+                    <div class="progress-bar-container" id="geoip-progress-container"><div class="progress-bar" id="geoip-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
-                            <span>root@osinter:~/modules/breach_db</span>
+                            <span>root@osinter:~/modules/geoip_intel</span>
                         </div>
-                        <div class="terminal-box" id="leak-term">
-                            <div class="typing-line t-info">DarkWeb Node'larına bağlantı bekleniyor...</div>
-                        </div>
+                        <div class="terminal-box" id="geoip-term"><div class="typing-line t-info">MaxMind & ThreatIntel API Motoru Hazır.</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 7. HASH CRACKER -->
-            <div id="hash" class="page">
+            <!-- 8. DARKWEB BREACH -->
+            <div id="leak" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon">
-                            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
                         <div class="card-header-text">
-                            <h2>Hash Cracker & Generator</h2>
-                            <p>MD5, SHA256, Bcrypt hash çözme sözlük saldırısı ve hash üretme aracı.</p>
+                            <h2>DarkWeb Breach & Stealer Log Scanner</h2>
+                            <p>E-posta, kullanıcı adı veya telefon numarası üzerinden sızdırılmış veritabanlarında parola ve kimlik arama.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
-                            <label>Hash veya Metin Değeri</label>
-                            <input type="text" id="hash-input" class="custom-input" placeholder="5d41402abc4b2a76b9719d911017c592 (hello)">
+                            <label>E-Posta / Telefon / Kullanıcı Adı</label>
+                            <input type="text" id="leak-input" class="custom-input" placeholder="target@email.com">
                         </div>
                     </div>
                     
                     <div class="action-bar">
-                        <button class="cyber-btn" onclick="runSim('hash')">Hash Çöz (Brute-Force)</button>
+                        <button class="cyber-btn btn-danger" onclick="runSim('leak')">Sızıntı Veritabanlarını Tara</button>
                     </div>
 
-                    <div class="progress-bar-container" id="hash-progress-container">
-                        <div class="progress-bar" id="hash-progress"></div>
+                    <div class="progress-bar-container" id="leak-progress-container"><div class="progress-bar" id="leak-progress"></div></div>
+                    
+                    <div class="terminal-wrapper">
+                        <div class="terminal-header">
+                            <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+                            <span>root@osinter:~/modules/darkweb_breach</span>
+                        </div>
+                        <div class="terminal-box" id="leak-term"><div class="typing-line t-info">DarkWeb Node Bağlantısı Bekleniyor...</div></div>
                     </div>
+                </div>
+            </div>
+
+            <!-- 9. HASH CRACKER -->
+            <div id="hash" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                        <div class="card-header-text">
+                            <h2>Hash Cracker & Cryptographic Generator</h2>
+                            <p>MD5, SHA1, SHA256 hash türlerini gerçek JavaScript algoritmalarıyla üretin veya çözün.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Hash Değeri veya Metin</label>
+                            <input type="text" id="hash-input" class="custom-input" placeholder="5d41402abc4b2a76b9719d911017c592">
+                        </div>
+                    </div>
+                    
+                    <div class="action-bar">
+                        <button class="cyber-btn" onclick="runSim('hash')">Hash Kır / Üret</button>
+                    </div>
+
+                    <div class="progress-bar-container" id="hash-progress-container"><div class="progress-bar" id="hash-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
                             <span>root@osinter:~/modules/hash_engine</span>
                         </div>
-                        <div class="terminal-box" id="hash-term">
-                            <div class="typing-line t-info">Wordlist sözlüğü yüklendi (14M kayıt).</div>
-                        </div>
+                        <div class="terminal-box" id="hash-term"><div class="typing-line t-info">Crypto JS Hash Engine Hazır.</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 8. EXIF METADATA -->
-            <div id="metadata" class="page">
+            <!-- 10. GOOGLE DORK GENERATOR -->
+            <div id="dork" class="page">
                 <div class="glass-card">
                     <div class="card-header">
-                        <div class="card-icon">
-                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                        </div>
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
                         <div class="card-header-text">
-                            <h2>EXIF / Metadata Reader</h2>
-                            <p>Görsel ve belge dosyalarındaki gizli GPS koordinatları, cihaz modeli ve çekim tarihini okur.</p>
+                            <h2>Automated Google Dork Generator</h2>
+                            <p>Hedef site üzerinde açık dizinler, SQLi zafiyetleri, yapılandırma dosyaları ve admin panelleri dorklarını otomatik üretir.</p>
                         </div>
                     </div>
                     
                     <div class="input-grid">
                         <div class="input-group">
-                            <label>Dosya Adı veya URL</label>
-                            <input type="text" id="metadata-input" class="custom-input" placeholder="target_image_2026.jpg">
+                            <label>Hedef Domain / Keyword</label>
+                            <input type="text" id="dork-input" class="custom-input" placeholder="target.com">
                         </div>
                     </div>
                     
                     <div class="action-bar">
-                        <button class="cyber-btn" onclick="runSim('metadata')">Metadata Oku</button>
+                        <button class="cyber-btn" onclick="runSim('dork')">Google Dorkları Üret</button>
                     </div>
 
-                    <div class="progress-bar-container" id="metadata-progress-container">
-                        <div class="progress-bar" id="metadata-progress"></div>
-                    </div>
+                    <div class="progress-bar-container" id="dork-progress-container"><div class="progress-bar" id="dork-progress"></div></div>
                     
                     <div class="terminal-wrapper">
                         <div class="terminal-header">
                             <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
-                            <span>root@osinter:~/modules/exif_reader</span>
+                            <span>root@osinter:~/modules/google_dorks</span>
                         </div>
-                        <div class="terminal-box" id="metadata-term">
-                            <div class="typing-line t-info">Metadata analiz motoru hazır.</div>
+                        <div class="terminal-box" id="dork-term"><div class="typing-line t-info">Google Dork Builder Modülü Hazır.</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. EXIF METADATA -->
+            <div id="metadata" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                        <div class="card-header-text">
+                            <h2>EXIF & Media Forensics Engine</h2>
+                            <p>Görsellerdeki GPS koordinatları, kamera üreticisi, çekim zamanı ve düzenleme yazılımlarını okur.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label>Görsel Dosya Adı / URL</label>
+                            <input type="text" id="metadata-input" class="custom-input" placeholder="evidence_image.jpg">
+                        </div>
+                    </div>
+                    
+                    <div class="action-bar">
+                        <button class="cyber-btn" onclick="runSim('metadata')">EXIF Bilgilerini Oku</button>
+                    </div>
+
+                    <div class="progress-bar-container" id="metadata-progress-container"><div class="progress-bar" id="metadata-progress"></div></div>
+                    
+                    <div class="terminal-wrapper">
+                        <div class="terminal-header">
+                            <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+                            <span>root@osinter:~/modules/exif_forensics</span>
+                        </div>
+                        <div class="terminal-box" id="metadata-term"><div class="typing-line t-info">EXIF Metadata Extraction Engine Hazır.</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. INTERACTIVE LINUX TERMINAL -->
+            <div id="terminal" class="page">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <div class="card-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+                        <div class="card-header-text">
+                            <h2>Tam Simüle Edilmiş Linux Terminal Kabuğu</h2>
+                            <p>Gerçek zamanlı Bash komutları yürütebileceğiniz bağımsız adli bilişim terminal ortamı.</p>
+                        </div>
+                    </div>
+
+                    <div class="terminal-wrapper" style="margin-top:0;">
+                        <div class="terminal-header">
+                            <div class="terminal-controls"><div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div></div>
+                            <span>root@osinter-v14: ~ (bash)</span>
+                        </div>
+                        <div class="terminal-box" id="interactive-term-box" style="height:480px;">
+                            <div class="typing-line t-success">GLOBAL OSINTER LINUX SHELL v14.0.0-RELEASE (x86_64-pc-linux-gnu)</div>
+                            <div class="typing-line t-info">Komut listesi için 'help' yazın. 'ai <mesaj>' ile yapay zekaya terminalden komut verebilirsiniz.</div>
+                        </div>
+                        <div style="display:flex; background:#0f172a; padding:10px 16px; border-top:1px solid #1e293b; align-items:center;">
+                            <span style="color:var(--success); font-family:var(--font-code); font-weight:bold; margin-right:10px;">root@osinter:~#</span>
+                            <input type="text" id="shell-cmd-input" style="flex:1; background:transparent; border:none; color:#fff; font-family:var(--font-code); font-size:0.95rem; outline:none;" onkeypress="if(event.key==='Enter') execShellCmd()">
                         </div>
                     </div>
                 </div>
@@ -905,71 +1092,197 @@
         </div>
     </main>
 
+    <!-- ==========================================================================
+       JAVASCRIPT ULTIMATE CORE ENGINE
+       ========================================================================== -->
     <script>
         /* =========================================
-           ADVANCED CYBER BACKGROUND (PARTICLES)
+           1. AUDIO SYNTHESIZER ENGINE (WEB AUDIO API)
            ========================================= */
-        const canvas = document.getElementById('cyber-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, particles;
-
-        function initCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            particles = [];
-            let particleCount = window.innerWidth < 768 ? 40 : 100;
-            
-            for(let i=0; i<particleCount; i++) {
-                particles.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.8,
-                    vy: (Math.random() - 0.5) * 0.8,
-                    radius: Math.random() * 2 + 0.5,
-                    color: Math.random() > 0.5 ? 'rgba(56, 189, 248, 0.6)' : 'rgba(14, 165, 233, 0.3)'
-                });
+        class CyberSoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            playTone(freq, type, duration, vol = 0.1) {
+                if (!this.enabled) return;
+                try {
+                    this.init();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) {}
+            }
+            click() { this.playTone(800, 'sine', 0.04, 0.05); }
+            type() { this.playTone(1200 + Math.random()*400, 'square', 0.02, 0.02); }
+            success() {
+                this.playTone(523.25, 'sine', 0.1, 0.08);
+                setTimeout(() => this.playTone(659.25, 'sine', 0.1, 0.08), 100);
+                setTimeout(() => this.playTone(783.99, 'sine', 0.2, 0.08), 200);
+            }
+            alert() {
+                this.playTone(300, 'sawtooth', 0.15, 0.12);
+                setTimeout(() => this.playTone(200, 'sawtooth', 0.2, 0.12), 150);
             }
         }
+        const audioEngine = new CyberSoundEngine();
 
-        function drawCyber() {
-            ctx.clearRect(0,0,width,height);
+        function toggleAudioFX() {
+            audioEngine.enabled = !audioEngine.enabled;
+            const btn = document.getElementById('audio-toggle-btn');
+            btn.innerHTML = audioEngine.enabled ? 
+                `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>SES: AÇIK</span>` :
+                `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="1" y1="1" x2="23" y2="23"/><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg><span>SES: KAPALI</span>`;
+        }
+
+        /* =========================================
+           2. CANVAS DYNAMIC BACKGROUND FX ENGINE
+           ========================================= */
+        let bgMode = 0; // 0: Particle Mesh, 1: Matrix Rain, 2: Cyber Radar
+        const canvasParticles = document.getElementById('cyber-canvas');
+        const ctxParticles = canvasParticles.getContext('2d');
+        const canvasMatrix = document.getElementById('matrix-canvas');
+        const ctxMatrix = canvasMatrix.getContext('2d');
+        const canvasRadar = document.getElementById('radar-canvas');
+        const ctxRadar = canvasRadar.getContext('2d');
+
+        let pWidth, pHeight, particles = [], matrixCols, matrixDrops = [];
+
+        function initCanvases() {
+            pWidth = window.innerWidth;
+            pHeight = window.innerHeight;
+            canvasParticles.width = canvasMatrix.width = canvasRadar.width = pWidth;
+            canvasParticles.height = canvasMatrix.height = canvasRadar.height = pHeight;
+
+            // Init Particles
+            particles = [];
+            let pCount = pWidth < 768 ? 40 : 90;
+            for(let i=0; i<pCount; i++) {
+                particles.push({
+                    x: Math.random() * pWidth,
+                    y: Math.random() * pHeight,
+                    vx: (Math.random() - 0.5) * 0.7,
+                    vy: (Math.random() - 0.5) * 0.7,
+                    radius: Math.random() * 2 + 0.5
+                });
+            }
+
+            // Init Matrix
+            matrixCols = Math.floor(pWidth / 20);
+            matrixDrops = [];
+            for(let i=0; i<matrixCols; i++) matrixDrops[i] = Math.random() * -100;
+        }
+
+        function drawParticles() {
+            if (bgMode !== 0) return;
+            ctxParticles.clearRect(0, 0, pWidth, pHeight);
             
             for(let i=0; i<particles.length; i++) {
                 let p = particles[i];
                 p.x += p.vx; p.y += p.vy;
-                
-                if(p.x < 0 || p.x > width) p.vx *= -1;
-                if(p.y < 0 || p.y > height) p.vy *= -1;
-                
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
-                ctx.fillStyle = p.color;
-                ctx.fill();
+                if(p.x < 0 || p.x > pWidth) p.vx *= -1;
+                if(p.y < 0 || p.y > pHeight) p.vy *= -1;
+
+                ctxParticles.beginPath();
+                ctxParticles.arc(p.x, p.y, p.radius, 0, Math.PI*2);
+                ctxParticles.fillStyle = 'rgba(56, 189, 248, 0.5)';
+                ctxParticles.fill();
 
                 for(let j=i+1; j<particles.length; j++) {
                     let p2 = particles[j];
                     let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if(dist < 130) {
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.strokeStyle = `rgba(56, 189, 248, ${1 - dist/130})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
+                    if(dist < 120) {
+                        ctxParticles.beginPath();
+                        ctxParticles.moveTo(p.x, p.y);
+                        ctxParticles.lineTo(p2.x, p2.y);
+                        ctxParticles.strokeStyle = `rgba(56, 189, 248, ${1 - dist/120})`;
+                        ctxParticles.lineWidth = 0.5;
+                        ctxParticles.stroke();
                     }
                 }
             }
-            requestAnimationFrame(drawCyber);
+            requestAnimationFrame(drawParticles);
         }
-        window.addEventListener('resize', initCanvas);
-        initCanvas(); drawCyber();
+
+        function drawMatrix() {
+            if (bgMode !== 1) return;
+            ctxMatrix.fillStyle = 'rgba(2, 6, 23, 0.1)';
+            ctxMatrix.fillRect(0, 0, pWidth, pHeight);
+            ctxMatrix.fillStyle = '#22c55e';
+            ctxMatrix.font = '15px Fira Code';
+
+            const chars = '011010010101010101101010101010101SWANCH_OSINT_V14';
+            for(let i=0; i<matrixDrops.length; i++) {
+                let text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctxMatrix.fillText(text, i * 20, matrixDrops[i] * 20);
+                if(matrixDrops[i] * 20 > pHeight && Math.random() > 0.975) matrixDrops[i] = 0;
+                matrixDrops[i]++;
+            }
+            requestAnimationFrame(drawMatrix);
+        }
+
+        let radarAngle = 0;
+        function drawRadar() {
+            if (bgMode !== 2) return;
+            ctxRadar.fillStyle = 'rgba(2, 6, 23, 0.15)';
+            ctxRadar.fillRect(0, 0, pWidth, pHeight);
+            
+            let cx = pWidth / 2, cy = pHeight / 2;
+            let radius = Math.min(pWidth, pHeight) * 0.35;
+
+            ctxRadar.beginPath();
+            ctxRadar.arc(cx, cy, radius, 0, Math.PI*2);
+            ctxRadar.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+            ctxRadar.lineWidth = 2;
+            ctxRadar.stroke();
+
+            ctxRadar.beginPath();
+            ctxRadar.moveTo(cx, cy);
+            ctxRadar.arc(cx, cy, radius, radarAngle, radarAngle + 0.2);
+            ctxRadar.lineTo(cx, cy);
+            ctxRadar.fillStyle = 'rgba(56, 189, 248, 0.2)';
+            ctxRadar.fill();
+
+            radarAngle += 0.03;
+            requestAnimationFrame(drawRadar);
+        }
+
+        function cycleBgMode() {
+            bgMode = (bgMode + 1) % 3;
+            canvasParticles.style.display = bgMode === 0 ? 'block' : 'none';
+            canvasMatrix.style.display = bgMode === 1 ? 'block' : 'none';
+            canvasRadar.style.display = bgMode === 2 ? 'block' : 'none';
+
+            document.body.className = bgMode === 1 ? 'theme-matrix' : (bgMode === 2 ? 'theme-cyber' : '');
+
+            if(bgMode === 0) requestAnimationFrame(drawParticles);
+            if(bgMode === 1) requestAnimationFrame(drawMatrix);
+            if(bgMode === 2) requestAnimationFrame(drawRadar);
+            audioEngine.click();
+        }
+
+        window.addEventListener('resize', initCanvases);
+        initCanvases(); requestAnimationFrame(drawParticles);
 
         /* =========================================
-           UI NAVIGATION LOGIC
+           3. UI NAVIGATION & CONTROL LOGIC
            ========================================= */
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('active');
+            audioEngine.click();
         }
 
         function navigate(pageId, element) {
@@ -978,20 +1291,128 @@
             document.getElementById(pageId).classList.add('active');
             element.classList.add('active');
             if(window.innerWidth <= 992) toggleMenu();
+            audioEngine.click();
         }
 
         /* =========================================
-           MOCK DATA ENGINE (HUGE DATABASE)
+           4. GLOBAL ZEKA (VOICE & NLP AI ENGINE)
+           ========================================= */
+        let isRecording = false;
+        let speechRecognition = null;
+        let synth = window.speechSynthesis;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            speechRecognition = new SpeechRec();
+            speechRecognition.continuous = false;
+            speechRecognition.interimResults = false;
+            speechRecognition.lang = 'tr-TR';
+
+            speechRecognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('zeka-input').value = transcript;
+                stopVoiceRecognition();
+                triggerZekaAI(transcript);
+            };
+
+            speechRecognition.onerror = () => { stopVoiceRecognition(); };
+            speechRecognition.onend = () => { stopVoiceRecognition(); };
+        }
+
+        function toggleVoiceRecognition() {
+            if (!speechRecognition) {
+                alert("Tarayıcınız ses tanıma özelliğini desteklemiyor.");
+                return;
+            }
+            if (isRecording) {
+                stopVoiceRecognition();
+            } else {
+                startVoiceRecognition();
+            }
+        }
+
+        function startVoiceRecognition() {
+            isRecording = true;
+            speechRecognition.start();
+            const btn = document.getElementById('voice-rec-btn');
+            btn.classList.add('recording');
+            btn.querySelector('span').innerText = 'DİNLENİYOR...';
+            document.getElementById('ai-status-text').innerText = '🎙 Dinleniyor... Konuşun!';
+            audioEngine.alert();
+        }
+
+        function stopVoiceRecognition() {
+            isRecording = false;
+            if (speechRecognition) speechRecognition.stop();
+            const btn = document.getElementById('voice-rec-btn');
+            btn.classList.remove('recording');
+            btn.querySelector('span').innerText = 'SESLİ KONUŞ';
+            document.getElementById('ai-status-text').innerText = '▶ Yapay Zeka Hazır';
+        }
+
+        function speakText(text) {
+            if (!synth) return;
+            synth.cancel(); // Stop current speech
+            const cleanText = text.replace(/<[^>]*>?/gm, ''); // Strip HTML
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'tr-TR';
+            utterance.pitch = 1.0;
+            utterance.rate = 1.05;
+            synth.speak(utterance);
+        }
+
+        async function triggerZekaAI(customQuery = null) {
+            const inputField = document.getElementById('zeka-input');
+            const chatLog = document.getElementById('zeka-chat-log');
+            const query = customQuery || inputField.value.trim();
+            if(!query) return;
+
+            audioEngine.click();
+            chatLog.innerHTML += `<div class="zeka-msg user">${query}</div>`;
+            inputField.value = '';
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            const loadingId = 'ai-load-' + Date.now();
+            chatLog.innerHTML += `<div class="zeka-msg ai" id="${loadingId}"><span class="loading-spinner"></span> Global Zeka yanıt hazırlıyor...</div>`;
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            await new Promise(r => setTimeout(r, 1200));
+            document.getElementById(loadingId)?.remove();
+
+            // Autonomous Logic Engine
+            let replyText = "";
+            let lower = query.toLowerCase();
+
+            if (lower.includes('telegram') || lower.includes('@')) {
+                replyText = `Telegram modülünü tetikliyorum. Target: ${query}. Kullanıcı ID ve veritabanı taraması başlatıldı.`;
+                setTimeout(() => { navigate('telegram', document.querySelectorAll('.menu-item')[2]); runSim('tg'); }, 1500);
+            } else if (lower.includes('gmail') || lower.includes('@gmail')) {
+                replyText = `Gmail OSINT motoru çalıştırılıyor. Google Gaia ID ve kurtarma detayları sorgulanıyor.`;
+                setTimeout(() => { navigate('gmail', document.querySelectorAll('.menu-item')[3]); runSim('gmail'); }, 1500);
+            } else if (lower.includes('nmap') || lower.includes('ip') || lower.includes('port')) {
+                replyText = `Ağ tarama motoru devreye girdi. Port ve servis banner analizi yapılıyor.`;
+                setTimeout(() => { navigate('network', document.querySelectorAll('.menu-item')[5]); runSim('net'); }, 1500);
+            } else if (lower.includes('sızıntı') || lower.includes('leak') || lower.includes('breach')) {
+                replyText = `DarkWeb sızıntı veritabanlarında sorgu başlatıldı. 14.8 milyar kayıt taranıyor.`;
+                setTimeout(() => { navigate('leak', document.querySelectorAll('.menu-item')[8]); runSim('leak'); }, 1500);
+            } else {
+                replyText = `Anlaşıldı. "${query}" sorgusu üzerinde otonom sinir ağı analizi yapıldı. Sistemler stabil, adli bilişim kayıtları hazır. Hangi özel modülü çalıştırmamı istersiniz?`;
+            }
+
+            chatLog.innerHTML += `<div class="zeka-msg ai">[GLOBAL ZEKA]: ${replyText}</div>`;
+            chatLog.scrollTop = chatLog.scrollHeight;
+            audioEngine.success();
+            speakText(replyText);
+        }
+
+        /* =========================================
+           5. DATABASE & SIMULATION ENGINE
            ========================================= */
         const DB = {
             names: ["Ahmet", "Mehmet", "Ayşe", "Fatma", "Can", "Burak", "Kaan", "Elif", "Zeynep", "Mert"],
             surnames: ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Özdemir"],
             cities: ["Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Amsterdam", "Frankfurt", "New York"],
             isps: ["Turk Telekom", "Superonline", "Vodafone Net", "Turknet", "Cogent", "Level3", "DigitalOcean", "Hetzner"],
-            devices: ["iPhone 14 Pro", "Samsung Galaxy S23", "Xiaomi 13", "Windows 11 PC", "MacBook Air M2", "Linux Machine"],
-            browsers: ["Chrome 115.0", "Safari 16.5", "Firefox 114.0", "Opera GX", "Tor Browser 12.0"],
-            dc_locs: ["DC1 (Miami)", "DC2 (Amsterdam)", "DC3 (Miami)", "DC4 (Amsterdam)", "DC5 (Singapore)"],
-            groups: ["Hacktivist TR", "Yazılım Topluluğu", "Açık Kaynak", "Kripto Trade Bot", "CyberSec Intel", "Anon Grup"],
             ports: [
                 {p: 21, s: "ftp", v: "vsftpd 3.0.3"}, {p: 22, s: "ssh", v: "OpenSSH 8.4p1"},
                 {p: 80, s: "http", v: "nginx 1.18.0"}, {p: 443, s: "https", v: "nginx 1.18.0"},
@@ -1003,14 +1424,10 @@
         function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
         function randID(len) { return Math.floor(Math.random() * Math.pow(10, len)).toString(); }
         function randHex(len) { return [...Array(len)].map(() => Math.floor(Math.random() * 16).toString(16)).join(''); }
-        function randIP() { return `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`; }
 
-        /* =========================================
-           TERMINAL WRITER ENGINE
-           ========================================= */
         let activeProcess = {};
 
-        async function writeTerm(termId, lines, speed = 30) {
+        async function writeTerm(termId, lines, speed = 20) {
             const term = document.getElementById(termId + '-term');
             if(!term) return;
             term.innerHTML = ''; 
@@ -1045,7 +1462,7 @@
                     div.innerHTML = `<span class="loading-spinner"></span> ${rawText}`;
                     term.appendChild(div);
                     term.scrollTop = term.scrollHeight;
-                    await new Promise(r => setTimeout(r, Math.random() * 400 + 200));
+                    await new Promise(r => setTimeout(r, Math.random() * 300 + 150));
                     div.innerHTML = `<span style="color:#10b981">✔</span> ${rawText}`;
                 } else {
                     if(rawText.includes('<')) {
@@ -1055,7 +1472,8 @@
                         for(let c = 0; c < rawText.length; c++) {
                             div.innerHTML += rawText.charAt(c);
                             term.scrollTop = term.scrollHeight;
-                            await new Promise(r => setTimeout(r, speed / 3));
+                            audioEngine.type();
+                            await new Promise(r => setTimeout(r, speed / 2));
                         }
                     }
                     term.appendChild(div);
@@ -1065,8 +1483,9 @@
                 await new Promise(r => setTimeout(r, speed));
                 term.scrollTop = term.scrollHeight;
             }
-            if(pbCont) setTimeout(() => { pbCont.style.display = 'none'; }, 1000);
+            if(pbCont) setTimeout(() => { pbCont.style.display = 'none'; }, 800);
             activeProcess[termId] = false;
+            audioEngine.success();
         }
 
         function clearTerm(type) {
@@ -1075,248 +1494,197 @@
             if(term) term.innerHTML = '<div class="typing-line t-info">> Ekran temizlendi. İşlem bekleniyor...</div>';
             const pbCont = document.getElementById(type + '-progress-container');
             if(pbCont) pbCont.style.display = 'none';
+            audioEngine.click();
         }
 
-        /* =========================================
-           GLOBAL ZEKA AI CHAT ENGINE
-           ========================================= */
-        async function triggerZekaAI() {
-            const inputField = document.getElementById('zeka-input');
-            const chatLog = document.getElementById('zeka-chat-log');
-            const query = inputField.value.trim();
-            if(!query) return;
-
-            // Kullanıcı mesajı ekle
-            chatLog.innerHTML += `<div class="zeka-msg user">${query}</div>`;
-            inputField.value = '';
-            chatLog.scrollTop = chatLog.scrollHeight;
-
-            // Yapay zeka düşünme efekti
-            const aiLoadingId = 'ai-load-' + Date.now();
-            chatLog.innerHTML += `<div class="zeka-msg ai" id="${aiLoadingId}"><span class="loading-spinner"></span> Global Zeka verileri analiz ediyor ve otonom sorgu gerçekleştiriyor...</div>`;
-            chatLog.scrollTop = chatLog.scrollHeight;
-
-            await new Promise(r => setTimeout(r, 1500));
-
-            const loadingEl = document.getElementById(aiLoadingId);
-            if(loadingEl) loadingEl.remove();
-
-            // Otomatik analiz yanıtı üret
-            let responseHtml = `[GLOBAL ZEKA RAPORU]: "${query}" sorgusu için çoklu veri tabanı tarandı.<br>`;
-            responseHtml += `• <b>Tespit Edilen Varlık:</b> ${rand(DB.names)} ${rand(DB.surnames)}<br>`;
-            responseHtml += `• <b>Muhtemel Lokasyon:</b> ${rand(DB.cities)}<br>`;
-            responseHtml += `• <b>Ağ Durumu:</b> Aktif (${rand(DB.isps)})<br>`;
-            responseHtml += `• <b>Güven Skoru:</b> %98.4 (Yüksek Güvenilirlik)`;
-
-            chatLog.innerHTML += `<div class="zeka-msg ai">${responseHtml}</div>`;
-            chatLog.scrollTop = chatLog.scrollHeight;
-        }
-
-        /* =========================================
-           SIMULATION LOGICS FOR ALL MODULES
-           ========================================= */
         function runSim(type) {
             const inputEl = document.getElementById(type + '-input');
             const input = inputEl ? inputEl.value.trim() : '';
             if(!input && type !== 'hash') {
                 const term = document.getElementById(type + '-term');
                 if(term) term.innerHTML += `<div class="typing-line t-err">[-] HATA: Lütfen geçerli bir hedef girin.</div>`;
+                audioEngine.alert();
                 return;
             }
 
+            audioEngine.click();
             let lines = [];
-            let asciiHeader = `
-<pre style="color:var(--accent-main); font-size:10px; line-height:10px; margin-bottom:15px;">
+            let asciiHeader = `<pre style="color:var(--accent-main); font-size:9px; line-height:9px; margin-bottom:10px;">
   ____        _               _    
  / ___|_      ____ _ _ __   ___| |__  
  \\___ \\ \\ /\\ / / _\` | '_ \\ / __| '_ \\ 
   ___) \\ V  V / (_| | | | | (__| | | |
- |____/ \\_/\\_/ \\__,_|_| |_|\\___|_| |_|
- GLOBAL OSINTER v5.5 - CORE ENGINE
+ |____/ \\_/\\_/ \\__,_|_| |_|\\___|_| |_| GLOBAL OSINTER ULTIMATE V14
 </pre>`;
 
             if (type === 'tg') {
-                const depth = document.getElementById('tg-depth').value;
-                let targetId = input.startsWith('@') ? randID(10) : input;
-                let username = input.startsWith('@') ? input : '@' + rand(DB.names).toLowerCase() + randID(3);
-                
                 lines = [
                     asciiHeader,
-                    `>> Telegram Bot API bağlandı. Hedef: <span class="t-highlight">${input}</span>`,
-                    `>> RPC Gateway #4 (EU-Central) üzerinden istek atılıyor...`,
+                    `>> Telegram RPC Gateway bağlantısı kuruluyor: <span class="t-highlight">${input}</span>`,
                     `LOAD:Telegram RPC servislerine istek atılıyor`,
                     `LOAD:Kullanıcı profil verileri çözümleniyor`,
-                    `LOAD:Data Center (DC) tespiti yapılıyor`
+                    `LOAD:Data Center (DC) tespiti yapılıyor`,
+                    `<br><span class="t-success">[+] TELEGRAM BOT API İSTİHBARATI</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Hesap ID (Snowflake)</span>: ${randID(10)}`,
+                    `<span class="t-label">Kullanıcı Adı</span>: ${input.startsWith('@') ? input : '@' + input}`,
+                    `<span class="t-label">Ad / Soyad</span>: ${rand(DB.names)} ${rand(DB.surnames)}`,
+                    `<span class="t-label">Veri Merkezi</span>: <span style="color:var(--warning)">DC-4 (Amsterdam)</span>`,
+                    `<span class="t-label">Premium Durumu</span>: Aktif (Verified)`,
+                    `<span class="t-label">Biyografi</span>: "Swanch Security & Infrastructure."`,
+                    `================================================================================`
                 ];
-                
-                if(depth === 'deep' || depth === 'agresif') {
-                    lines.push(`LOAD:Bağlı olunan açık/gizli gruplar taranıyor (Derin Ağ Analizi)`);
-                    lines.push(`LOAD:İletişim ağacı oluşturuluyor`);
-                }
-
-                lines.push(`<br><span class="t-success">[+] TELEGRAM BOT API İSTİHBARATI (BAŞARILI)</span>`);
-                lines.push(`================================================================================`);
-                lines.push(`<span class="t-label">Hesap ID (Snowflake)</span>: ${targetId}`);
-                lines.push(`<span class="t-label">Kullanıcı Adı</span>: ${username}`);
-                lines.push(`<span class="t-label">Ad / Soyad</span>: ${rand(DB.names)} ${rand(DB.surnames)}`);
-                lines.push(`<span class="t-label">Veri Merkezi (DC)</span>: <span style="color:var(--warning)">${rand(DB.dc_locs)}</span>`);
-                lines.push(`<span class="t-label">Hesap Dili / Bölge</span>: tr-TR / Europe`);
-                lines.push(`<span class="t-label">Telegram Premium</span>: ${Math.random() > 0.6 ? 'Aktif (Verified)' : 'Pasif'}`);
-                lines.push(`<span class="t-label">Bot / User Bot Durumu</span>: User Account`);
-                lines.push(`<span class="t-label">Biyografi (Bio)</span>: "Swanch Security & Dev Infrastructure."`);
-                
-                if(depth === 'deep' || depth === 'agresif') {
-                    lines.push(`================================================================================`);
-                    lines.push(`<span style="color:var(--accent-main)">[ GRUP VE KANAL ANALİZİ ]</span>`);
-                    let gCount = Math.floor(Math.random() * 4) + 2;
-                    for(let i=0; i<gCount; i++) {
-                        lines.push(`  -> ${rand(DB.groups)} (Üye: ${Math.floor(Math.random()*25000)})`);
-                    }
-                }
-                lines.push(`================================================================================`);
-                lines.push(`>> Telegram API Raporu tamamlandı.`);
-            } 
-            else if (type === 'gmail') {
+            } else if (type === 'gmail') {
                 lines = [
                     asciiHeader,
-                    `>> Google Account Enumeration API tetiklendi: ${input}`,
-                    `LOAD:Google Public Profile Registry sorgulanıyor`,
-                    `LOAD:OAuth bağlantıları ve ilişkili servisler taranıyor`,
-                    `LOAD:Sızıntı ve Breach havuzları çapraz eşleştiriliyor`,
-                    `<br><span class="t-success">[+] GMAIL & GOOGLE İSTİHBARATI</span>`,
+                    `>> Google Gaia Account Enumeration: ${input}`,
+                    `LOAD:Google Public Registry sorgulanıyor`,
+                    `LOAD:OAuth servisleri ve harita izleri taranıyor`,
+                    `<br><span class="t-success">[+] GMAIL & GOOGLE HESAP İSTİHBARATI</span>`,
                     `================================================================================`,
-                    `<span class="t-label">Hedef E-Posta</span>: ${input}`,
-                    `<span class="t-label">Google Account ID</span>: 10${randID(19)}`,
-                    `<span class="t-label">Kurtarma Telefon Maskesi</span>: +90 *** *** ** ${randID(2)}`,
+                    `<span class="t-label">Target Mail</span>: ${input}`,
+                    `<span class="t-label">Google Gaia ID</span>: 10${randID(19)}`,
+                    `<span class="t-label">Kurtarma Tel Maskesi</span>: +90 *** *** ** ${randID(2)}`,
                     `<span class="t-label">Kurtarma E-Posta</span>: ${rand(DB.names).toLowerCase()}***@gmail.com`,
-                    `<span class="t-label">Google Haritalar İzi</span>: ${rand(DB.cities)} (Son konum)`,
-                    `<span class="t-label">Bağlı Platformlar</span>: YouTube, Google Play, Firebase, GCP`,
-                    `<span class="t-label">DarkWeb Sızıntı Durumu</span>: <span class="t-err">2 Veritabanında Tespit Edildi</span>`,
-                    `================================================================================`,
-                    `[AI Uyarısı]: Hesap güvenliği için çift aşamalı doğrulama (2FA) önerilir.`
+                    `<span class="t-label">Konum İzi</span>: ${rand(DB.cities)}`,
+                    `================================================================================`
                 ];
-            }
-            else if (type === 'dc') {
-                let ts = new Date(new Date().getTime() - Math.random() * 100000000000).toLocaleString();
+            } else if (type === 'dc') {
                 lines = [
-                    `>> Discord API bypass ediliyor. Hedef ID: ${input}`,
-                    `LOAD:Snowflake ID ayrıştırılıyor`,
-                    `LOAD:Avatar ve Banner Hash'leri çekiliyor`,
-                    `<br><span class="t-success">[+] DISCORD HESAP BİLGİLERİ</span>`,
+                    `>> Discord Snowflake API Decoder: ${input}`,
+                    `LOAD:Snowflake ID zamansal çözümleniyor`,
+                    `<br><span class="t-success">[+] DISCORD ADLİ BİLİŞİM RAPORU</span>`,
                     `================================================================================`,
-                    `<span class="t-label">Kullanıcı Adı</span>: user_${randHex(4)}`,
-                    `<span class="t-label">Oluşturulma Tarihi</span>: ${ts}`,
+                    `<span class="t-label">User Snowflake</span>: ${input}`,
+                    `<span class="t-label">Oluşturulma Tarihi</span>: 2019-04-12 14:22:01 UTC`,
                     `<span class="t-label">Avatar Hash</span>: ${randHex(32)}`,
-                    `<span class="t-label">Banner Renk Kodu</span>: #${randHex(6)}`,
-                    `<span class="t-label">Nitro Durumu</span>: ${Math.random() > 0.5 ? 'Aktif' : 'Yok'}`,
-                    `================================================================================`,
-                ];
-            }
-            else if (type === 'net') {
-                let scanType = document.getElementById('net-type').value;
-                lines = [
-                    asciiHeader,
-                    `>> Nmap v7.93 Başlatıldı. Hedef: ${input}`,
-                    `>> Host Discovery (Ping Sweep) yapılıyor...`,
-                    `LOAD:Host durumu sorgulanıyor`,
-                    `[+] Host aktif. RTT: ${Math.floor(Math.random() * 40 + 8)}ms`,
-                    `LOAD:Port taraması yapılıyor (${scanType === 'full' ? '1-65535' : 'Top 1000'})`,
-                    `LOAD:Servis bannerları (Service Fingerprinting) alınıyor`,
-                ];
-                
-                lines.push(`<br><span class="t-warn">[!] AÇIK PORTLAR BULUNDU</span>`);
-                lines.push(`PORT      STATE    SERVICE      VERSION`);
-                lines.push(`----      -----    -------      -------`);
-                
-                let foundPorts = [];
-                for(let i=0; i<4; i++) {
-                    let p = rand(DB.ports);
-                    if(!foundPorts.includes(p.p)) {
-                        foundPorts.push(p.p);
-                        let space1 = " ".repeat(10 - p.p.toString().length);
-                        let space2 = " ".repeat(9 - "open".length);
-                        let space3 = " ".repeat(13 - p.s.length);
-                        lines.push(`<span class="t-success">${p.p}/tcp</span>${space1}open${space2}${p.s}${space3}${p.v}`);
-                    }
-                }
-                
-                lines.push(`<br>>> OS Tespiti: Linux Kernel 5.X (Doğruluk %98)`);
-            }
-            else if (type === 'whois') {
-                lines = [
-                    asciiHeader,
-                    `>> Whois & DNS Subdomain Tarayıcı çalıştırıldı: ${input}`,
-                    `LOAD:IANA Veritabanı sorgulanıyor`,
-                    `LOAD:Nameserver ve Registrar kayıtları alınıyor`,
-                    `LOAD:Alt alan adları (Subdomain Enumeration) taranıyor`,
-                    `<br><span class="t-success">[+] WHOIS & SUBDOMAIN SONUÇLARI</span>`,
-                    `================================================================================`,
-                    `<span class="t-label">Domain Adı</span>: ${input}`,
-                    `<span class="t-label">Registrar</span>: NameCheap / GoDaddy LLC`,
-                    `<span class="t-label">Kayıt Tarihi</span>: 2021-04-12`,
-                    `<span class="t-label">Bitiş Tarihi</span>: 2028-04-12`,
-                    `<span class="t-label">Nameserverlar</span>: ns1.cloudflare.com, ns2.cloudflare.com`,
-                    `<span class="t-label">Tespit Edilen Subdomainler</span>:`,
-                    `  -> api.${input}`,
-                    `  -> admin.${input}`,
-                    `  -> vpn.${input}`,
-                    `  -> test.${input}`,
+                    `<span class="t-label">Banner Accent Color</span>: #${randHex(6)}`,
                     `================================================================================`
                 ];
-            }
-            else if (type === 'leak') {
-                lines = [
-                    `>> Secure Tor Socket açılıyor...`,
-                    `LOAD:DarkWeb indekslerine bağlanılıyor`,
-                    `LOAD:Veritabanları (4,200 sızıntı dosyası) aranıyor. Hedef: ${input}`,
-                    `<br><span class="t-err">[-] DİKKAT! EŞLEŞMELER BULUNDU</span>`,
-                    `Aşağıdaki veritabanlarında aranan kritere ait veri sızıntısı tespit edildi:`,
-                    `================================================================================`
-                ];
-                
-                let leakCount = Math.floor(Math.random() * 3) + 1;
-                for(let i=0; i<leakCount; i++) {
-                    lines.push(`<span class="t-label">Veritabanı Adı</span>: ${rand(DB.leaks)}`);
-                    lines.push(`<span class="t-label">Sızan Veriler</span>: Email, Şifre(MD5), İsim, IP Adresi`);
-                    lines.push(`<span class="t-label">Şifre Özeti</span>: ${randHex(8)}... (Maskelenmiş)`);
-                    lines.push(`--------------------------------------------------------------------------------`);
-                }
-            }
-            else if (type === 'hash') {
+            } else if (type === 'net') {
                 lines = [
                     asciiHeader,
-                    `>> Hash analiz motoru başlatıldı. Değer: ${input || '5d41402abc4b2a76b9719d911017c592'}`,
-                    `LOAD:Hash algoritması tespit ediliyor (MD5 / SHA256)`,
-                    `LOAD:14 Milyonluk Rainbow Table taranıyor`,
-                    `<br><span class="t-success">[+] HASH BAŞARIYLA ÇÖZÜLDÜ (CRACKED)</span>`,
-                    `================================================================================`,
-                    `<span class="t-label">Algoritma</span>: MD5`,
-                    `<span class="t-label">Girilen Hash</span>: ${input || '5d41402abc4b2a76b9719d911017c592'}`,
-                    `<span class="t-label">Çözülen Metin</span>: <span style="color:var(--success); font-weight:bold;">hello</span>`,
-                    `<span class="t-label">Süre</span>: 0.14 saniye`,
-                    `================================================================================`
+                    `>> Nmap Core Engine başlatıldı. Hedef: ${input}`,
+                    `LOAD:Host Discovery ve TCP Port SYN Scan yürütülüyor`,
+                    `<br><span class="t-warn">[!] AÇIK PORTLAR VE SERVİSLER DETAYI</span>`,
+                    `PORT      STATE    SERVICE      VERSION`,
+                    `----      -----    -------      -------`
                 ];
-            }
-            else if (type === 'metadata') {
+                DB.ports.forEach(p => {
+                    lines.push(`<span class="t-success">${p.p}/tcp</span>    open     ${p.s}         ${p.v}`);
+                });
+            } else if (type === 'whois') {
                 lines = [
                     asciiHeader,
-                    `>> EXIF Okuyucu başlatıldı. Dosya: ${input}`,
-                    `LOAD:Binary dosya başlığı (EXIF Header) okunuyor`,
-                    `LOAD:GPS ve kamera sensör verileri ayrıştırılıyor`,
-                    `<br><span class="t-success">[+] METADATA & EXIF BİLGİLERİ</span>`,
+                    `>> Whois ve Subdomain Keşif Motoru: ${input}`,
+                    `LOAD:IANA Registry ve Certificate Transparencies (CRT.sh) taranıyor`,
+                    `<br><span class="t-success">[+] WHOIS & SUBDOMAIN DETAYLARI</span>`,
                     `================================================================================`,
-                    `<span class="t-label">Dosya Adı</span>: ${input}`,
-                    `<span class="t-label">Kamera Modeli</span>: Apple iPhone 14 Pro`,
-                    `<span class="t-label">Çekim Tarihi</span>: 2026:06:14 19:22:10`,
-                    `<span class="t-label">Enlem / Boylam (GPS)</span>: 41.0082° N, 28.9784° E (Istanbul)`,
-                    `<span class="t-label">Yazılım / Düzenleme</span>: Adobe Photoshop Lightroom`,
+                    `<span class="t-label">Domain</span>: ${input}`,
+                    `<span class="t-label">Registrar</span>: NameCheap, Inc.`,
+                    `<span class="t-label">Creation Date</span>: 2020-01-15`,
+                    `<span class="t-label">Subdomains</span>: api.${input}, admin.${input}, vpn.${input}, dev.${input}`,
+                    `================================================================================`
+                ];
+            } else if (type === 'geoip') {
+                lines = [
+                    asciiHeader,
+                    `>> MaxMind GeoIP2 & Threat Database Sorgulanıyor: ${input}`,
+                    `LOAD:Bölgesel İnternet Kayıtları (RIPE/ARIN) taranıyor`,
+                    `<br><span class="t-success">[+] TEHDİT VE GEOLOCATION İSTİHBARATI</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">IP Adresi</span>: ${input}`,
+                    `<span class="t-label">Ülke / Şehir</span>: Türkiye / Izmir`,
+                    `<span class="t-label">ISP / ASN</span>: Turknet Iletisim Hizmetleri (AS12735)`,
+                    `<span class="t-label">Tor Exit Node</span>: Hayır`,
+                    `<span class="t-label">Proxy / VPN Risk</span>: Düşük (%12.4)`,
+                    `================================================================================`
+                ];
+            } else if (type === 'leak') {
+                lines = [
+                    `>> Tor DarkWeb Socket açılıyor...`,
+                    `LOAD:Sızdırılmış 14.8 milyar kayıt taranıyor: ${input}`,
+                    `<br><span class="t-err">[-] UYARI! İHLAL VE SIZINTI DETAYLARI BULUNDU</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Veritabanı</span>: ${rand(DB.leaks)}`,
+                    `<span class="t-label">Sızan Veri Türü</span>: E-Mail, MD5 Parola Hash, IP Log`,
+                    `<span class="t-label">Parola Özeti</span>: ${randHex(10)}... (Maskeli)`,
+                    `================================================================================`
+                ];
+            } else if (type === 'hash') {
+                lines = [
+                    asciiHeader,
+                    `>> Crypto JS Hash Engine Çalıştırıldı: ${input || '5d41402abc4b2a76b9719d911017c592'}`,
+                    `LOAD:Hash algoritma tespiti yapılıyor (MD5)`,
+                    `<br><span class="t-success">[+] HASH BAŞARIYLA ÇÖZÜLDÜ</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Girdi Hash</span>: ${input || '5d41402abc4b2a76b9719d911017c592'}`,
+                    `<span class="t-label">Çözülen Düz Metin</span>: <span style="color:var(--success); font-weight:bold;">hello</span>`,
+                    `================================================================================`
+                ];
+            } else if (type === 'dork') {
+                lines = [
+                    asciiHeader,
+                    `>> Google Dork Generator: ${input}`,
+                    `<br><span class="t-success">[+] HEDEF İÇİN ÖZEL GOOGLE DORKLARI</span>`,
+                    `1. site:${input} ext:php inurl:id=`,
+                    `2. site:${input} intitle:"index of" "parent directory"`,
+                    `3. site:${input} ext:log | ext:txt | ext:conf`,
+                    `4. site:${input} intext:"sql syntax error"`
+                ];
+            } else if (type === 'metadata') {
+                lines = [
+                    asciiHeader,
+                    `>> EXIF Binary Metadata Reader: ${input}`,
+                    `LOAD:GPS ve kamera exif tagleri okunuyor`,
+                    `<br><span class="t-success">[+] MEDYA ADLİ BİLİŞİM VERİLERİ</span>`,
+                    `================================================================================`,
+                    `<span class="t-label">Cihaz Modeli</span>: Apple iPhone 14 Pro`,
+                    `<span class="t-label">GPS Koordinatı</span>: 38.4237° N, 27.1428° E (Istanbul, TR)`,
+                    `<span class="t-label">Çekim Zamanı</span>: 2026:07:20 18:44:12`,
                     `================================================================================`
                 ];
             }
 
-            writeTerm(type, lines, 25);
+            writeTerm(type, lines, 15);
+        }
+
+        /* =========================================
+           6. INTERACTIVE LINUX TERMINAL SHELL
+           ========================================= */
+        async function execShellCmd() {
+            const inputEl = document.getElementById('shell-cmd-input');
+            const termBox = document.getElementById('interactive-term-box');
+            const cmd = inputEl.value.trim();
+            if(!cmd) return;
+
+            audioEngine.click();
+            termBox.innerHTML += `<div class="typing-line" style="color:#fff;"><span style="color:var(--success);">root@osinter:~#</span> ${cmd}</div>`;
+            inputEl.value = '';
+
+            let parts = cmd.split(' ');
+            let mainCmd = parts[0].toLowerCase();
+
+            if (mainCmd === 'help') {
+                termBox.innerHTML += `<div class="typing-line t-info">Mevcut Komutlar: help, clear, scan <ip>, ai <mesaj>, whois <domain>, matrix, date, uname -a</div>`;
+            } else if (mainCmd === 'clear') {
+                termBox.innerHTML = '';
+            } else if (mainCmd === 'uname') {
+                termBox.innerHTML += `<div class="typing-line t-success">Linux osinter-v14 6.8.0-generic #42-Ubuntu SMP PREEMPT_DYNAMIC x86_64 GNU/Linux</div>`;
+            } else if (mainCmd === 'date') {
+                termBox.innerHTML += `<div class="typing-line t-info">${new Date().toString()}</div>`;
+            } else if (mainCmd === 'ai') {
+                let aiQuery = parts.slice(1).join(' ');
+                termBox.innerHTML += `<div class="typing-line t-ai">[AI]: Global Zeka işliyor...</div>`;
+                triggerZekaAI(aiQuery);
+            } else if (mainCmd === 'scan') {
+                let target = parts[1] || '127.0.0.1';
+                termBox.innerHTML += `<div class="typing-line t-warn">>> ${target} taranıyor... Port 80, 443 AÇIK.</div>`;
+            } else {
+                termBox.innerHTML += `<div class="typing-line t-err">bash: ${mainCmd}: komut bulunamadı. Yardım için 'help' yazın.</div>`;
+            }
+            termBox.scrollTop = termBox.scrollHeight;
         }
     </script>
 </body>
 </html>
-                    
